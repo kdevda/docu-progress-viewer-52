@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { ProgressTracker } from "@/components/ProgressTracker";
-import { DocumentUpload } from "@/components/DocumentUpload";
+import ProgressTracker from "@/components/ProgressTracker";
+import DocumentUpload from "@/components/DocumentUpload";
 import { FileText, MessageSquarePlus, Search, User, Info, Plus, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +29,7 @@ type Client = {
   id: string;
   name: string;
   dealId: string;
+  email: string; // Added email to the Client type
   recentChat?: {
     preview: string;
     timestamp: Date;
