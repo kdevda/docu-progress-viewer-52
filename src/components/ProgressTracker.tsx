@@ -28,9 +28,9 @@ const ProgressTracker = ({
   const currentIndex = stages.findIndex(stage => stage.id === currentStage);
   
   return (
-    <div className="flex justify-between w-full relative">
+    <div className="flex justify-between w-full relative px-16">
       {/* Progress Line - positioned behind the circles */}
-      <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 z-0"></div>
+      <div className="absolute top-4 left-16 right-16 h-1 bg-gray-200 z-0"></div>
       
       {stages.map((stage, index) => {
         const isCompleted = index < currentIndex;
@@ -58,7 +58,7 @@ const ProgressTracker = ({
               )}
             </div>
             <span className={cn(
-              "text-xs md:text-sm text-center absolute -bottom-6",
+              "text-xs md:text-sm whitespace-nowrap absolute -bottom-6",
               isActive ? "text-[#a29f95] font-semibold" : 
               isCompleted ? "text-[#a29f95] font-medium" : "text-gray-500"
             )}>

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -428,27 +427,12 @@ const Agent = () => {
       {/* Sidebar */}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
         {/* Logo */}
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <div className="relative group cursor-pointer" onClick={triggerLogoUpload}>
-            <img 
-              src={logoUrl} 
-              alt="Bank Logo" 
-              className="h-10 w-auto"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 flex items-center justify-center transition-all duration-200 rounded">
-              <UploadCloud className="text-white opacity-0 group-hover:opacity-100 h-5 w-5" />
-            </div>
-            <input 
-              type="file" 
-              ref={logoInputRef} 
-              className="hidden" 
-              accept="image/png,image/jpeg" 
-              onChange={handleLogoUpload}
-            />
-          </div>
-          <div className="text-xs text-gray-500">
-            Click to update logo
-          </div>
+        <div className="p-4 border-b border-gray-200 flex items-center justify-center">
+          <img 
+            src="/lovable-uploads/da4cffd1-9a5a-4e34-bbfd-377882856f5c.png" 
+            alt="Bank Logo" 
+            className="h-10 w-auto"
+          />
         </div>
 
         {/* New Chat Button */}
@@ -763,71 +747,3 @@ const Agent = () => {
                       <div className={cn(
                         "text-xs mt-1",
                         message.sender === 'user' ? "text-right" : ""
-                      )}>
-                        {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Suggestions */}
-                <div className="mb-4">
-                  <p className="text-xs text-gray-500 mb-2">Suggestions:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {suggestionMessages.map((suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded-full"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex">
-                  <Textarea
-                    placeholder="Type here..."
-                    className="min-h-12 resize-none"
-                    value={newMessage}
-                    onChange={e => setNewMessage(e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                  />
-                  <Button 
-                    className="ml-2 self-end bg-[#a29f95] hover:bg-[#8a8880]"
-                    onClick={handleSendMessage}
-                  >
-                    Send
-                  </Button>
-                </div>
-                
-                {/* Toggle Chat Button */}
-                {viewMode !== 'chat' && showChat && (
-                  <Button
-                    className="fixed bottom-4 right-4 rounded-full h-12 w-12 p-0 bg-[#a29f95]"
-                    onClick={() => setShowChat(true)}
-                  >
-                    <MessageCircle size={20} />
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-        
-        {/* Progress Tracker */}
-        <div className="p-6 bg-white border-t border-gray-200">
-          <ProgressTracker currentStage={currentStage} onStageClick={handleStageClick} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Agent;
