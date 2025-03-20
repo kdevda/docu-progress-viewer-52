@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -634,6 +635,14 @@ const Agent = () => {
         
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Progress Tracker */}
+          <div className="py-8 bg-white border-b border-gray-200">
+            <ProgressTracker 
+              currentStage={currentStage}
+              onStageClick={handleStageClick}
+            />
+          </div>
+          
           {/* View Mode Toggle */}
           <div className="bg-white border-b border-gray-200 px-6 py-2">
             <ToggleGroup 
@@ -747,3 +756,58 @@ const Agent = () => {
                       <div className={cn(
                         "text-xs mt-1",
                         message.sender === 'user' ? "text-right" : ""
+                      )}>
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Suggestions */}
+                {messages.length < 3 && (
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-500 mb-2">Suggested messages:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {suggestionMessages.map((suggestion, index) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          {suggestion}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Message Input */}
+                <div className="mt-auto border-t border-gray-200 pt-4">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Type your message..."
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      className="flex-1"
+                    />
+                    <Button 
+                      onClick={handleSendMessage} 
+                      className="bg-[#a29f95] hover:bg-[#8a8880]"
+                    >
+                      Send
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Agent;
