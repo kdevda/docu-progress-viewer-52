@@ -3,22 +3,21 @@ import React from 'react';
 import { CheckIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type ApplicationStage = 'application' | 'pre-flight' | 'loi' | 'underwriting' | 'processing' | 'closing';
+export type ApplicationStage = 'application' | 'pre-flight' | 'loi' | 'underwriting';
 
 interface ProgressTrackerProps {
   currentStage: ApplicationStage;
+  onStageClick?: (stage: ApplicationStage) => void;
 }
 
 const stages: { id: ApplicationStage; label: string }[] = [
   { id: 'application', label: 'Application' },
   { id: 'pre-flight', label: 'Pre-Flight' },
   { id: 'loi', label: 'LOI' },
-  { id: 'underwriting', label: 'Underwriting' },
-  { id: 'processing', label: 'Processing' },
-  { id: 'closing', label: 'Closing' }
+  { id: 'underwriting', label: 'Underwriting' }
 ];
 
-const ProgressTracker = ({ currentStage }: ProgressTrackerProps) => {
+const ProgressTracker = ({ currentStage, onStageClick }: ProgressTrackerProps) => {
   // Determine the indices for styling
   const currentIndex = stages.findIndex(stage => stage.id === currentStage);
   
@@ -39,7 +38,7 @@ const ProgressTracker = ({ currentStage }: ProgressTrackerProps) => {
               isActive && "active",
               isCompleted && "completed"
             )}
-            onClick={() => console.log(`Clicked on ${stage.label}`)}
+            onClick={() => onStageClick && onStageClick(stage.id)}
           >
             <div 
               className={cn(
@@ -68,21 +67,6 @@ const ProgressTracker = ({ currentStage }: ProgressTrackerProps) => {
             )}>
               {stage.label}
             </span>
-            
-            {/* Arrow for active stage */}
-            {isActive && (
-              <div className="w-full h-full absolute top-0 left-0">
-                <div className="relative w-full h-full">
-                  <div className="absolute h-8 w-full">
-                    <div className="relative w-full h-full">
-                      <div className="absolute top-0 right-0 h-0 w-0 
-                                      border-b-[20px] border-b-transparent 
-                                      border-l-[20px] border-l-nano-blue"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         );
       })}
