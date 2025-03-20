@@ -38,9 +38,9 @@ const ProgressTracker = ({ currentStage }: ProgressTrackerProps) => {
             <div 
               className={cn(
                 "w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mb-2 transition-all duration-300",
-                isCompleted ? "bg-bank-progress-completed" : 
-                isActive ? "bg-bank-progress-active" : 
-                "bg-bank-progress-default"
+                isCompleted ? "bg-nano-green" : 
+                isActive ? "bg-nano-orange" : 
+                "bg-nano-gray"
               )}
             >
               {isCompleted ? (
@@ -48,7 +48,7 @@ const ProgressTracker = ({ currentStage }: ProgressTrackerProps) => {
               ) : (
                 <span className={cn(
                   "text-xs md:text-sm font-medium",
-                  isActive ? "text-white" : "text-gray-500"
+                  isActive ? "text-white" : "text-nano-darkgray"
                 )}>
                   {index + 1}
                 </span>
@@ -56,9 +56,9 @@ const ProgressTracker = ({ currentStage }: ProgressTrackerProps) => {
             </div>
             <span className={cn(
               "text-xs md:text-sm whitespace-nowrap",
-              isActive ? "text-bank-accent font-semibold" : 
-              isCompleted ? "text-bank-progress-completed font-medium" : 
-              "text-gray-500"
+              isActive ? "text-nano-orange font-semibold" : 
+              isCompleted ? "text-nano-green font-medium" : 
+              "text-nano-darkgray"
             )}>
               {stage.label}
             </span>
