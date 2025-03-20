@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,19 @@ import ProgressTracker from "@/components/ProgressTracker";
 import DocumentUpload from "@/components/DocumentUpload";
 import SpreadView from "@/components/SpreadView";
 import MemoView from "@/components/MemoView";
-import { FileText, MessageSquarePlus, Search, User, Info, Plus, Upload, DollarSign, FileSpreadsheet, FileText as FileTextIcon } from 'lucide-react';
+import { 
+  FileText, 
+  MessageSquarePlus, 
+  Search, 
+  User, 
+  Info, 
+  Plus, 
+  Upload, 
+  FileSpreadsheet, 
+  FileText as FileTextIcon,
+  PanelRight,
+  UploadCloud
+} from 'lucide-react';
 import { toast } from "sonner";
 import { cn } from '@/lib/utils';
 
@@ -51,7 +63,7 @@ type Client = {
   };
 };
 
-type ViewMode = 'chat' | 'spreads' | 'memo';
+type ViewMode = 'documents' | 'spreads' | 'memo' | 'chat' | 'pre-screen' | 'loi';
 
 const Agent = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -107,13 +119,17 @@ const Agent = () => {
     }
   ]);
   
-  const [selectedClient, setSelectedClient] = useState<Client>(clients[1]);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(clients[1]);
   const [currentStage, setCurrentStage] = useState<'application' | 'pre-flight' | 'loi' | 'underwriting'>('underwriting');
   const [viewMode, setViewMode] = useState<ViewMode>('spreads');
-  const [documentSearchQuery, setDocumentSearchQuery] = useState("");
+  const [clientSearchQuery, setClientSearchQuery] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [memoUrl, setMemoUrl] = useState<string | undefined>(undefined);
+  const [preScreenUrl, setPreScreenUrl] = useState<string | undefined>(undefined);
+  const [loiUrl, setLoiUrl] = useState<string | undefined>(undefined);
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const [logoUrl, setLogoUrl] = useState<string>("/lovable-uploads/da4cffd1-9a5a-4e34-bbfd-377882856f5c.png");
 
   // Sample financial spreads data
   const financialSpreads = [
@@ -170,6 +186,9 @@ const Agent = () => {
       sender: 'agent',
       timestamp: new Date()
     }]);
+    setSelectedClient(null);
+    setCurrentStage('application');
+    setViewMode('chat');
     setShowChat(true);
   };
 
@@ -181,13 +200,79 @@ const Agent = () => {
     toast.success(`Memo "${file.name}" uploaded successfully`);
   };
 
+  const handlePreScreenUpload = (file: File) => {
+    const objectUrl = URL.createObjectURL(file);
+    setPreScreenUrl(objectUrl);
+    toast.success(`Pre-Screen document "${file.name}" uploaded successfully`);
+  };
+
+  const handleLoiUpload = (file: File) => {
+    const objectUrl = URL.createObjectURL(file);
+    setLoiUrl(objectUrl);
+    toast.success(`LOI document "${file.name}" uploaded successfully`);
+  };
+
   const handleStageClick = (stage: 'application' | 'pre-flight' | 'loi' | 'underwriting') => {
     setCurrentStage(stage);
-    // If stage is underwriting, default to spreads view
-    if (stage === 'underwriting') {
-      setViewMode('spreads');
-    } else {
+    
+    // Set the appropriate view mode based on the selected stage
+    if (stage === 'application') {
+      setViewMode('chat');
       setShowChat(true);
+    } else if (stage === 'pre-flight') {
+      setViewMode('pre-screen');
+    } else if (stage === 'loi') {
+      setViewMode('loi');
+    } else if (stage === 'underwriting') {
+      setViewMode('spreads');
+    }
+  };
+
+  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const objectUrl = URL.createObjectURL(file);
+      setLogoUrl(objectUrl);
+      toast.success('Logo updated successfully');
+    }
+  };
+
+  const triggerLogoUpload = () => {
+    logoInputRef.current?.click();
+  };
+
+  // Filter clients based on search query
+  const filteredClients = clients.filter(client => 
+    client.name.toLowerCase().includes(clientSearchQuery.toLowerCase()) ||
+    client.dealId.includes(clientSearchQuery)
+  );
+
+  // Get available view modes based on current stage
+  const getAvailableViewModes = () => {
+    switch (currentStage) {
+      case 'application':
+        return [{ value: 'chat', label: 'Chat', icon: <MessageSquarePlus size={16} /> }];
+      case 'pre-flight':
+        return [
+          { value: 'documents', label: 'Documents', icon: <FileText size={16} /> },
+          { value: 'pre-screen', label: 'Pre-Screen View', icon: <FileText size={16} /> },
+          { value: 'chat', label: 'Chat', icon: <MessageSquarePlus size={16} /> }
+        ];
+      case 'loi':
+        return [
+          { value: 'documents', label: 'Documents', icon: <FileText size={16} /> },
+          { value: 'loi', label: 'LOI View', icon: <FileText size={16} /> },
+          { value: 'chat', label: 'Chat', icon: <MessageSquarePlus size={16} /> }
+        ];
+      case 'underwriting':
+        return [
+          { value: 'documents', label: 'Documents', icon: <FileText size={16} /> },
+          { value: 'spreads', label: 'Spreads', icon: <FileSpreadsheet size={16} /> },
+          { value: 'memo', label: 'Memo View', icon: <FileTextIcon size={16} /> },
+          { value: 'chat', label: 'Chat', icon: <MessageSquarePlus size={16} /> }
+        ];
+      default:
+        return [];
     }
   };
 
@@ -196,60 +281,98 @@ const Agent = () => {
       {/* Sidebar */}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
         {/* Logo */}
-        <div className="p-4 border-b border-gray-200">
-          <img 
-            src="/lovable-uploads/da4cffd1-9a5a-4e34-bbfd-377882856f5c.png" 
-            alt="Nano Banc" 
-            className="h-10 w-auto"
-          />
-        </div>
-        
-        {/* Documents Section */}
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-medium text-sm">Documents</span>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-6 w-6" 
-              onClick={() => setIsUploading(true)}
-            >
-              <Upload className="h-4 w-4 text-gray-500" />
-            </Button>
-          </div>
-          
-          {isUploading && (
-            <div className="mb-4">
-              <DocumentUpload 
-                title="Upload Document"
-                description="Drag & drop or browse files"
-                onUpload={(file) => {
-                  handleUploadDocument(file);
-                  setIsUploading(false);
-                }}
-              />
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+          <div className="relative group cursor-pointer" onClick={triggerLogoUpload}>
+            <img 
+              src={logoUrl} 
+              alt="Bank Logo" 
+              className="h-10 w-auto"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 flex items-center justify-center transition-all duration-200 rounded">
+              <UploadCloud className="text-white opacity-0 group-hover:opacity-100 h-5 w-5" />
             </div>
-          )}
-          
-          {/* Document Search */}
-          <div className="relative mb-2">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search Documents..."
-              className="pl-8 py-1 h-9 text-sm bg-gray-50"
-              value={documentSearchQuery}
-              onChange={e => setDocumentSearchQuery(e.target.value)}
+            <input 
+              type="file" 
+              ref={logoInputRef} 
+              className="hidden" 
+              accept="image/png,image/jpeg" 
+              onChange={handleLogoUpload}
             />
           </div>
-          
-          {/* Uploaded Documents List */}
+        </div>
+
+        {/* New Chat Button */}
+        <div className="p-4 border-b border-gray-200">
+          <Button 
+            className="w-full bg-[#a29f95] hover:bg-[#8a8880] text-white"
+            onClick={handleNewChat}
+          >
+            <MessageSquarePlus className="mr-2 h-4 w-4" />
+            New Chat
+          </Button>
+        </div>
+        
+        {/* Clients Section */}
+        <div className="flex-1 overflow-auto p-4">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium text-sm">Clients</h3>
+              
+              {/* Client Search */}
+              <div className="relative">
+                <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-gray-400" />
+                <Input
+                  placeholder="Search..."
+                  className="pl-7 py-1 h-7 text-xs bg-gray-50 w-24"
+                  value={clientSearchQuery}
+                  onChange={e => setClientSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+            
+            {/* Client List */}
+            <div className="space-y-3">
+              {filteredClients.map(client => (
+                <div 
+                  key={client.id}
+                  className={cn(
+                    "p-3 rounded-md cursor-pointer border transition-all",
+                    selectedClient?.id === client.id 
+                      ? "bg-gray-50 border-[#a29f95]" 
+                      : "border-gray-100 hover:border-gray-200"
+                  )}
+                  onClick={() => setSelectedClient(client)}
+                >
+                  <div className="flex justify-between items-start mb-1">
+                    <span className="font-medium text-sm">Deal - {client.name}</span>
+                    <div className={cn(
+                      "w-3 h-3 rounded-full", 
+                      selectedClient?.id === client.id ? "bg-[#a29f95]" : "bg-gray-300"
+                    )} />
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-xs text-gray-600">${client.loanAmount.toLocaleString()}</p>
+                    {client.recentChat && (
+                      <p className="text-xs text-gray-500 truncate mt-1">{client.recentChat.preview}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {filteredClients.length === 0 && (
+                <p className="text-sm text-gray-500 italic text-center py-2">No clients found</p>
+              )}
+            </div>
+          </div>
+
+          {/* Documents List (moved to main view area) */}
           <div>
-            <p className="text-xs font-medium mb-1 text-gray-500">Uploaded Documents</p>
+            <h3 className="font-medium text-sm mb-2">Recent Documents</h3>
             {documents.length === 0 ? (
-              <p className="text-xs text-gray-400 italic">No documents uploaded</p>
+              <p className="text-xs text-gray-400 italic">No documents</p>
             ) : (
               <div className="space-y-2 max-h-60 overflow-y-auto">
-                {documents.map(doc => (
+                {documents.slice(0, 3).map(doc => (
                   <div key={doc.id} className="p-2 bg-gray-50 rounded-md">
                     <div className="flex items-center mb-1">
                       <FileText className="h-3 w-3 mr-2 text-gray-500" />
@@ -264,41 +387,6 @@ const Agent = () => {
             )}
           </div>
         </div>
-
-        {/* Clients Section */}
-        <div className="flex-1 overflow-auto p-4">
-          <div className="mb-6">
-            <h3 className="font-medium text-sm mb-3">Clients</h3>
-            
-            {/* Client List */}
-            <div className="space-y-3">
-              {clients.map(client => (
-                <div 
-                  key={client.id}
-                  className={cn(
-                    "p-3 rounded-md cursor-pointer border transition-all",
-                    selectedClient?.id === client.id 
-                      ? "bg-gray-50 border-nano-blue" 
-                      : "border-gray-100 hover:border-gray-200"
-                  )}
-                  onClick={() => setSelectedClient(client)}
-                >
-                  <div className="flex justify-between items-start mb-1">
-                    <span className="font-medium text-sm">Deal - {client.name}</span>
-                    <div className={cn(
-                      "w-3 h-3 rounded-full", 
-                      selectedClient?.id === client.id ? "bg-nano-blue" : "bg-gray-300"
-                    )} />
-                  </div>
-                  <p className="text-xs text-gray-600">${client.loanAmount.toLocaleString()}</p>
-                  {client.recentChat && (
-                    <p className="text-xs text-gray-500 truncate mt-1">{client.recentChat.preview}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
       
       {/* Main Content */}
@@ -306,198 +394,206 @@ const Agent = () => {
         {/* Header Bar */}
         <div className="h-16 border-b border-gray-200 flex items-center justify-between px-6 bg-white">
           <h1 className="text-lg font-medium">
-            Deal - {selectedClient?.name} - {new Date().toISOString().split('T')[0]} - ${selectedClient?.loanAmount.toLocaleString()}
+            {selectedClient ? (
+              <>Deal - {selectedClient.name} - {new Date().toISOString().split('T')[0]} - ${selectedClient.loanAmount.toLocaleString()}</>
+            ) : (
+              <>New Application - {new Date().toISOString().split('T')[0]}</>
+            )}
           </h1>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Info className="h-5 w-5 text-gray-600" />
+                <PanelRight className="h-5 w-5 text-gray-600" />
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-[400px] sm:w-[540px]">
+            <SheetContent side="right" className="w-[400px] sm:w-[540px]">
               <div className="h-full flex flex-col">
-                <div className="flex items-center space-x-4 pb-4">
-                  <div className="h-12 w-12 rounded-full bg-nano-blue text-white flex items-center justify-center">
-                    <span className="font-medium">
-                      {selectedClient?.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-medium">{selectedClient?.name}</h3>
-                    <p className="text-sm text-gray-500">Deal ID: {selectedClient?.dealId}</p>
-                  </div>
-                </div>
-                
-                <Separator className="my-4" />
-                
-                <div className="flex-1 overflow-auto">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium">Contact Information</p>
-                      <p className="text-sm">{selectedClient?.details.email}</p>
-                      <p className="text-sm">{selectedClient?.details.phone}</p>
-                      <p className="text-sm">{selectedClient?.details.address}</p>
+                {selectedClient ? (
+                  <>
+                    <div className="flex items-center space-x-4 pb-4">
+                      <div className="h-12 w-12 rounded-full bg-[#a29f95] text-white flex items-center justify-center">
+                        <span className="font-medium">
+                          {selectedClient.name.split(' ').map(n => n[0]).join('')}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-medium">{selectedClient.name}</h3>
+                        <p className="text-sm text-gray-500">Deal ID: {selectedClient.dealId}</p>
+                      </div>
                     </div>
                     
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium">Loan Details</p>
-                      <p className="text-sm">Amount: ${selectedClient?.details.loanAmount.toLocaleString()}</p>
-                      <p className="text-sm">Type: {selectedClient?.details.loanType}</p>
-                      <p className="text-sm">Property Value: ${selectedClient?.details.propertyValue.toLocaleString()}</p>
-                      <p className="text-sm">Credit Score: {selectedClient?.details.creditScore}</p>
+                    <Separator className="my-4" />
+                    
+                    <div className="flex-1 overflow-auto">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium">Contact Information</p>
+                          <p className="text-sm">{selectedClient.details.email}</p>
+                          <p className="text-sm">{selectedClient.details.phone}</p>
+                          <p className="text-sm">{selectedClient.details.address}</p>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium">Loan Details</p>
+                          <p className="text-sm">Amount: ${selectedClient.details.loanAmount.toLocaleString()}</p>
+                          <p className="text-sm">Type: {selectedClient.details.loanType}</p>
+                          <p className="text-sm">Property Value: ${selectedClient.details.propertyValue.toLocaleString()}</p>
+                          <p className="text-sm">Credit Score: {selectedClient.details.creditScore}</p>
+                        </div>
+                      </div>
+                      
+                      <Separator className="my-4" />
+                      
+                      <div>
+                        <p className="text-sm font-medium mb-3">Upload Document</p>
+                        <DocumentUpload 
+                          title="Upload Document"
+                          description="Upload any additional documents required for processing"
+                          onUpload={handleUploadDocument}
+                        />
+                      </div>
                     </div>
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-500">No client selected</p>
                   </div>
-                  
-                  <Separator className="my-4" />
-                  
-                  <div>
-                    <p className="text-sm font-medium mb-3">Documents</p>
-                    <DocumentUpload 
-                      title="Upload Document"
-                      description="Upload any additional documents required for processing"
-                      onUpload={handleUploadDocument}
-                    />
-                  </div>
-                </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>
         </div>
         
-        {/* Underwriting stage content */}
-        {currentStage === 'underwriting' ? (
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="bg-white border-b border-gray-200 px-6 py-2">
-              <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as ViewMode)}>
-                <ToggleGroupItem value="spreads" className="flex items-center gap-2">
-                  <FileSpreadsheet size={16} />
-                  <span>Spreads</span>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* View Mode Toggle */}
+          <div className="bg-white border-b border-gray-200 px-6 py-2">
+            <ToggleGroup 
+              type="single" 
+              value={viewMode} 
+              onValueChange={(value) => value && setViewMode(value as ViewMode)}
+            >
+              {getAvailableViewModes().map(mode => (
+                <ToggleGroupItem 
+                  key={mode.value} 
+                  value={mode.value} 
+                  className="flex items-center gap-2"
+                >
+                  {mode.icon}
+                  <span>{mode.label}</span>
                 </ToggleGroupItem>
-                <ToggleGroupItem value="memo" className="flex items-center gap-2">
-                  <FileTextIcon size={16} />
-                  <span>Memo View</span>
-                </ToggleGroupItem>
-                <ToggleGroupItem value="chat" className="flex items-center gap-2">
-                  <MessageSquarePlus size={16} />
-                  <span>Chat</span>
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-            
-            <div className="flex-1 overflow-auto p-4">
-              {viewMode === 'spreads' && <SpreadView spreads={financialSpreads} />}
-              {viewMode === 'memo' && <MemoView memoUrl={memoUrl} onUpload={handleMemoUpload} />}
-              {viewMode === 'chat' && (
-                <div className="max-w-4xl mx-auto h-full flex flex-col">
-                  <div className="flex-1 overflow-auto">
-                    {messages.map(message => (
-                      <div 
-                        key={message.id}
-                        className={cn(
-                          "mb-4 max-w-[80%]",
-                          message.sender === 'agent' ? "mr-auto" : "ml-auto"
-                        )}
-                      >
-                        <div className={cn(
-                          "rounded-lg p-4",
-                          message.sender === 'agent' 
-                            ? "bg-white border border-gray-200" 
-                            : "bg-nano-blue text-white"
-                        )}>
-                          {message.content}
+              ))}
+            </ToggleGroup>
+          </div>
+          
+          {/* Content Area */}
+          <div className="flex-1 overflow-auto p-4">
+            {/* Documents View */}
+            {viewMode === 'documents' && (
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-xl font-medium mb-4">Documents</h2>
+                
+                <div className="mb-6">
+                  <DocumentUpload 
+                    title="Upload Document"
+                    description="Drag & drop files or click to browse"
+                    onUpload={handleUploadDocument}
+                  />
+                </div>
+                
+                {documents.length === 0 ? (
+                  <div className="text-center p-8 bg-gray-50 rounded-lg border border-gray-200">
+                    <FileText className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+                    <p className="text-gray-500">No documents uploaded yet</p>
+                    <p className="text-sm text-gray-400 mt-1">Upload documents to get started</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {documents.map(doc => (
+                      <div key={doc.id} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                        <div className="flex items-center mb-2">
+                          <FileText className="h-5 w-5 mr-2 text-nano-blue" />
+                          <span className="font-medium truncate">{doc.name}</span>
                         </div>
-                        <div className={cn(
-                          "text-xs mt-1",
-                          message.sender === 'user' ? "text-right" : ""
-                        )}>
-                          {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        <div className="text-xs text-gray-500 mt-1">
+                          Uploaded on {new Date(doc.uploadDate).toLocaleDateString()}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {(doc.size / 1024).toFixed(0)} KB
                         </div>
                       </div>
                     ))}
                   </div>
-                  
-                  <div className="mt-4 flex">
-                    <Textarea
-                      placeholder="Type here..."
-                      className="min-h-12 resize-none"
-                      value={newMessage}
-                      onChange={e => setNewMessage(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage();
-                        }
-                      }}
-                    />
-                    <Button 
-                      className="ml-2 self-end"
-                      onClick={handleSendMessage}
-                    >
-                      Send
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          // Chat View for non-underwriting stages
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Chat Area */}
-            <div className="flex-1 overflow-auto p-6">
-              <div className="max-w-4xl mx-auto">
-                {messages.map(message => (
-                  <div 
-                    key={message.id}
-                    className={cn(
-                      "mb-4 max-w-[80%]",
-                      message.sender === 'agent' ? "mr-auto" : "ml-auto"
-                    )}
-                  >
-                    <div className={cn(
-                      "rounded-lg p-4",
-                      message.sender === 'agent' 
-                        ? "bg-white border border-gray-200" 
-                        : "bg-nano-blue text-white"
-                    )}>
-                      {message.content}
-                    </div>
-                    <div className={cn(
-                      "text-xs mt-1",
-                      message.sender === 'user' ? "text-right" : ""
-                    )}>
-                      {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                    </div>
-                  </div>
-                ))}
+                )}
               </div>
-            </div>
+            )}
             
-            {/* Message Input */}
-            <div className="p-4 border-t border-gray-200 bg-white">
-              <div className="max-w-4xl mx-auto flex">
-                <Textarea
-                  placeholder="Type here..."
-                  className="min-h-12 resize-none"
-                  value={newMessage}
-                  onChange={e => setNewMessage(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                />
-                <Button 
-                  className="ml-2 self-end"
-                  onClick={handleSendMessage}
-                >
-                  Send
-                </Button>
+            {/* Spreads View */}
+            {viewMode === 'spreads' && <SpreadView spreads={financialSpreads} />}
+            
+            {/* Memo View */}
+            {viewMode === 'memo' && <MemoView memoUrl={memoUrl} onUpload={handleMemoUpload} />}
+            
+            {/* Pre-Screen View */}
+            {viewMode === 'pre-screen' && <MemoView memoUrl={preScreenUrl} onUpload={handlePreScreenUpload} />}
+            
+            {/* LOI View */}
+            {viewMode === 'loi' && <MemoView memoUrl={loiUrl} onUpload={handleLoiUpload} />}
+            
+            {/* Chat View */}
+            {viewMode === 'chat' && (
+              <div className="max-w-4xl mx-auto h-full flex flex-col">
+                <div className="flex-1 overflow-auto">
+                  {messages.map(message => (
+                    <div 
+                      key={message.id}
+                      className={cn(
+                        "mb-4 max-w-[80%]",
+                        message.sender === 'agent' ? "mr-auto" : "ml-auto"
+                      )}
+                    >
+                      <div className={cn(
+                        "rounded-lg p-4",
+                        message.sender === 'agent' 
+                          ? "bg-white border border-gray-200" 
+                          : "bg-nano-blue text-white"
+                      )}>
+                        {message.content}
+                      </div>
+                      <div className={cn(
+                        "text-xs mt-1",
+                        message.sender === 'user' ? "text-right" : ""
+                      )}>
+                        {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-4 flex">
+                  <Textarea
+                    placeholder="Type here..."
+                    className="min-h-12 resize-none"
+                    value={newMessage}
+                    onChange={e => setNewMessage(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                  />
+                  <Button 
+                    className="ml-2 self-end bg-[#a29f95] hover:bg-[#8a8880]"
+                    onClick={handleSendMessage}
+                  >
+                    Send
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
         
         {/* Progress Tracker */}
         <div className="p-6 bg-white border-t border-gray-200">
