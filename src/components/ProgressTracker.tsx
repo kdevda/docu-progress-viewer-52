@@ -24,7 +24,7 @@ const ProgressTracker = ({ currentStage, onStageClick }: ProgressTrackerProps) =
   return (
     <div className="flex justify-between w-full relative">
       {/* Progress Line */}
-      <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 -z-10"></div>
+      <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 z-0"></div>
       
       {stages.map((stage, index) => {
         const isCompleted = index < currentIndex;
@@ -34,7 +34,7 @@ const ProgressTracker = ({ currentStage, onStageClick }: ProgressTrackerProps) =
           <div 
             key={stage.id}
             className={cn(
-              "progress-stage flex flex-col items-center cursor-pointer",
+              "progress-stage flex flex-col items-center cursor-pointer relative",
               isActive && "active",
               isCompleted && "completed"
             )}
@@ -42,8 +42,8 @@ const ProgressTracker = ({ currentStage, onStageClick }: ProgressTrackerProps) =
           >
             <div 
               className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center mb-2 transition-all duration-300",
-                isCompleted ? "bg-nano-green" : 
+                "w-8 h-8 rounded-full flex items-center justify-center mb-2 transition-all duration-300 z-10",
+                isCompleted ? "bg-[#a29f95]" : 
                 isActive ? "bg-nano-blue" : 
                 "bg-gray-200"
               )}
@@ -62,7 +62,7 @@ const ProgressTracker = ({ currentStage, onStageClick }: ProgressTrackerProps) =
             <span className={cn(
               "text-xs md:text-sm whitespace-nowrap",
               isActive ? "text-nano-blue font-semibold" : 
-              isCompleted ? "text-nano-green font-medium" : 
+              isCompleted ? "text-[#a29f95] font-medium" : 
               "text-gray-500"
             )}>
               {stage.label}

@@ -74,15 +74,15 @@ export default {
 					progress: {
 						default: '#e6e6e6',
 						active: '#0078d4',
-						completed: '#4caf50'
+						completed: '#a29f95'  // Changed from green to the requested color
 					}
 				},
 				nano: {
 					blue: '#1d3f7a',
 					orange: '#ff8a47',
-					green: '#00b88d',
+					green: '#a29f95',  // Changed from green to the requested color
 					navy: '#172a52',
-					lightblue: '#edf5ff',
+					lightblue: '#ffffff', // Changed to white
 					gray: '#f2f2f2',
 					darkgray: '#4a4a4a',
 					white: '#ffffff'
