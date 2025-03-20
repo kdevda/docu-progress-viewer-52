@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 213 100% 25%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +90,64 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-foreground antialiased;
   }
+}
+
+.progress-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.progress-stage::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -50%;
+  height: 2px;
+  width: 100%;
+  background-color: theme('colors.bank.progress.default');
+  z-index: -1;
+}
+
+.progress-stage:first-child::before {
+  display: none;
+}
+
+.progress-stage.active::before,
+.progress-stage.completed::before {
+  background-color: theme('colors.bank.progress.active');
+}
+
+.progress-stage.completed::before {
+  background-color: theme('colors.bank.progress.completed');
+}
+
+.file-drop-area {
+  border: 2px dashed theme('colors.gray.300');
+  border-radius: theme('borderRadius.md');
+  transition: all 0.2s ease;
+}
+
+.file-drop-area.dragging {
+  border-color: theme('colors.bank.accent');
+  background-color: theme('colors.bank.light');
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, rgba(240, 240, 240, 0.1) 4%, rgba(240, 240, 240, 0.3) 25%, rgba(240, 240, 240, 0.1) 36%);
+  background-size: 1000px 100%;
 }
