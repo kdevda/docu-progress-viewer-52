@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -105,11 +104,11 @@
 .progress-stage::before {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 1rem;
   left: -50%;
-  height: 2px;
+  height: 1px;
   width: 100%;
-  background-color: theme('colors.bank.progress.default');
+  background-color: theme('colors.gray.200');
   z-index: -1;
 }
 
@@ -119,11 +118,42 @@
 
 .progress-stage.active::before,
 .progress-stage.completed::before {
-  background-color: theme('colors.nano.orange');
+  background-color: theme('colors.nano.blue');
 }
 
 .progress-stage.completed::before {
   background-color: theme('colors.nano.green');
+}
+
+.arrow-box {
+  position: relative;
+  background: #88b7d5;
+  border: 2px solid #c2e1f5;
+}
+
+.arrow-box:after, .arrow-box:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.arrow-box:after {
+  border-color: rgba(136, 183, 213, 0);
+  border-bottom-color: #88b7d5;
+  border-width: 10px;
+  margin-left: -10px;
+}
+
+.arrow-box:before {
+  border-color: rgba(194, 225, 245, 0);
+  border-bottom-color: #c2e1f5;
+  border-width: 13px;
+  margin-left: -13px;
 }
 
 .file-drop-area {
