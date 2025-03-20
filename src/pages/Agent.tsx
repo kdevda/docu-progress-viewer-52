@@ -22,7 +22,13 @@ import {
   FileSpreadsheet, 
   FileText as FileTextIcon,
   PanelRight,
-  UploadCloud
+  UploadCloud,
+  MessageCircle,
+  Building2,
+  Calendar,
+  DollarSign,
+  ClipboardList,
+  FileUp
 } from 'lucide-react';
 import { toast } from "sonner";
 import { cn } from '@/lib/utils';
@@ -60,10 +66,26 @@ type Client = {
     loanType: string;
     propertyValue: number;
     creditScore: number;
+    propertyType?: string;
+    loanTerm?: number;
+    interestRate?: number;
+    ltv?: number;
+    noi?: number;
+    capRate?: number;
+    dscr?: number;
   };
 };
 
 type ViewMode = 'documents' | 'spreads' | 'memo' | 'chat' | 'pre-screen' | 'loi';
+
+// Suggested messages to display in the chat
+const suggestionMessages = [
+  "Upload completed application to start new deal",
+  "Request financial statements for underwriting",
+  "Schedule property inspection for next week",
+  "Need additional information on borrower credit history",
+  "Share latest term sheet with the client"
+];
 
 const Agent = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -94,7 +116,14 @@ const Agent = () => {
         loanAmount: 320000,
         loanType: 'Conventional 30-year fixed',
         propertyValue: 400000,
-        creditScore: 720
+        creditScore: 720,
+        propertyType: 'Retail Shopping Center',
+        loanTerm: 30,
+        interestRate: 5.25,
+        ltv: 80,
+        noi: 45000,
+        capRate: 5.8,
+        dscr: 1.25
       }
     },
     {
@@ -114,7 +143,95 @@ const Agent = () => {
         loanAmount: 450000,
         loanType: 'FHA 30-year fixed',
         propertyValue: 500000,
-        creditScore: 680
+        creditScore: 680,
+        propertyType: 'Office Building',
+        loanTerm: 25,
+        interestRate: 4.75,
+        ltv: 75,
+        noi: 62000,
+        capRate: 6.2,
+        dscr: 1.35
+      }
+    },
+    {
+      id: '119323096300',
+      name: 'Sarah Johnson',
+      dealId: '119323096300',
+      email: 'sarah.j@example.com',
+      loanAmount: 750000,
+      recentChat: {
+        preview: 'Reviewing the terms of the loan',
+        timestamp: new Date()
+      },
+      details: {
+        email: 'sarah.j@example.com',
+        phone: '(555) 234-5678',
+        address: '789 Pine Ave, Somewhere, CA 92102',
+        loanAmount: 750000,
+        loanType: 'Commercial Bridge Loan',
+        propertyValue: 1000000,
+        creditScore: 745,
+        propertyType: 'Mixed-Use Development',
+        loanTerm: 10,
+        interestRate: 6.25,
+        ltv: 75,
+        noi: 95000,
+        capRate: 7.1,
+        dscr: 1.4
+      }
+    },
+    {
+      id: '119323096301',
+      name: 'Michael Rodriguez',
+      dealId: '119323096301',
+      email: 'michael.r@example.com',
+      loanAmount: 1250000,
+      recentChat: {
+        preview: 'Preparing for closing next month',
+        timestamp: new Date()
+      },
+      details: {
+        email: 'michael.r@example.com',
+        phone: '(555) 345-6789',
+        address: '101 Cedar Blvd, Anytown, CA 90211',
+        loanAmount: 1250000,
+        loanType: 'Commercial Mortgage',
+        propertyValue: 1800000,
+        creditScore: 780,
+        propertyType: 'Industrial Warehouse',
+        loanTerm: 20,
+        interestRate: 5.5,
+        ltv: 70,
+        noi: 175000,
+        capRate: 8.2,
+        dscr: 1.65
+      }
+    },
+    {
+      id: '119323096302',
+      name: 'Jennifer Lee',
+      dealId: '119323096302',
+      email: 'jennifer.l@example.com',
+      loanAmount: 525000,
+      recentChat: {
+        preview: 'Submitted updated financial statements',
+        timestamp: new Date()
+      },
+      details: {
+        email: 'jennifer.l@example.com',
+        phone: '(555) 456-7890',
+        address: '202 Elm St, Somewhere, CA 92103',
+        loanAmount: 525000,
+        loanType: 'SBA 504 Loan',
+        propertyValue: 650000,
+        creditScore: 710,
+        propertyType: 'Retail Strip Center',
+        loanTerm: 25,
+        interestRate: 5.0,
+        ltv: 80,
+        noi: 65000,
+        capRate: 6.5,
+        dscr: 1.3
       }
     }
   ]);
@@ -130,6 +247,7 @@ const Agent = () => {
   const [loiUrl, setLoiUrl] = useState<string | undefined>(undefined);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoUrl, setLogoUrl] = useState<string>("/lovable-uploads/da4cffd1-9a5a-4e34-bbfd-377882856f5c.png");
+  const [documentInputRef] = useState<React.RefObject<HTMLInputElement>>(React.createRef());
 
   // Sample financial spreads data
   const financialSpreads = [
@@ -156,9 +274,20 @@ const Agent = () => {
     
     // Simulate agent response after a short delay
     setTimeout(() => {
+      // Different responses based on user message content
+      let responseContent = "I'll help you with that. Let me check your application details.";
+      
+      if (newMessage.toLowerCase().includes("document") || newMessage.toLowerCase().includes("upload")) {
+        responseContent = "You can upload documents directly using the document tab. Would you like me to guide you through the process?";
+      } else if (newMessage.toLowerCase().includes("rate") || newMessage.toLowerCase().includes("interest")) {
+        responseContent = "Current interest rates for commercial real estate loans are between 4.5% and 6.25% depending on the property type, loan term, and borrower creditworthiness. Would you like more specific information?";
+      } else if (newMessage.toLowerCase().includes("timeline") || newMessage.toLowerCase().includes("process")) {
+        responseContent = "Our typical processing timeline is 45-60 days from application to closing. We're currently in the underwriting phase for this deal, which usually takes 2-3 weeks.";
+      }
+      
       const agentResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: "I'll help you with that. Let me check your application details.",
+        content: responseContent,
         sender: 'agent',
         timestamp: new Date()
       };
@@ -231,6 +360,8 @@ const Agent = () => {
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+      // In a real application, you would upload this file to your backend server
+      // For demonstration, we'll use URL.createObjectURL to show the image locally
       const objectUrl = URL.createObjectURL(file);
       setLogoUrl(objectUrl);
       toast.success('Logo updated successfully');
@@ -239,6 +370,20 @@ const Agent = () => {
 
   const triggerLogoUpload = () => {
     logoInputRef.current?.click();
+  };
+
+  const triggerDocumentUpload = () => {
+    documentInputRef.current?.click();
+  };
+
+  const handleDocumentInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      handleUploadDocument(event.target.files[0]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setNewMessage(suggestion);
   };
 
   // Filter clients based on search query
@@ -256,12 +401,14 @@ const Agent = () => {
         return [
           { value: 'documents', label: 'Documents', icon: <FileText size={16} /> },
           { value: 'pre-screen', label: 'Pre-Screen View', icon: <FileText size={16} /> },
+          { value: 'spreads', label: 'Spreads', icon: <FileSpreadsheet size={16} /> },
           { value: 'chat', label: 'Chat', icon: <MessageSquarePlus size={16} /> }
         ];
       case 'loi':
         return [
           { value: 'documents', label: 'Documents', icon: <FileText size={16} /> },
           { value: 'loi', label: 'LOI View', icon: <FileText size={16} /> },
+          { value: 'spreads', label: 'Spreads', icon: <FileSpreadsheet size={16} /> },
           { value: 'chat', label: 'Chat', icon: <MessageSquarePlus size={16} /> }
         ];
       case 'underwriting':
@@ -298,6 +445,9 @@ const Agent = () => {
               accept="image/png,image/jpeg" 
               onChange={handleLogoUpload}
             />
+          </div>
+          <div className="text-xs text-gray-500">
+            Click to update logo
           </div>
         </div>
 
@@ -364,28 +514,6 @@ const Agent = () => {
               )}
             </div>
           </div>
-
-          {/* Documents List (moved to main view area) */}
-          <div>
-            <h3 className="font-medium text-sm mb-2">Recent Documents</h3>
-            {documents.length === 0 ? (
-              <p className="text-xs text-gray-400 italic">No documents</p>
-            ) : (
-              <div className="space-y-2 max-h-60 overflow-y-auto">
-                {documents.slice(0, 3).map(doc => (
-                  <div key={doc.id} className="p-2 bg-gray-50 rounded-md">
-                    <div className="flex items-center mb-1">
-                      <FileText className="h-3 w-3 mr-2 text-gray-500" />
-                      <span className="text-xs font-medium truncate">{doc.name}</span>
-                    </div>
-                    <div className="text-[10px] text-gray-400">
-                      {new Date(doc.uploadDate).toLocaleDateString()}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </div>
       
@@ -425,32 +553,88 @@ const Agent = () => {
                     <Separator className="my-4" />
                     
                     <div className="flex-1 overflow-auto">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Contact Information</p>
-                          <p className="text-sm">{selectedClient.details.email}</p>
-                          <p className="text-sm">{selectedClient.details.phone}</p>
-                          <p className="text-sm">{selectedClient.details.address}</p>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <User className="mr-2 h-4 w-4" /> 
+                            Contact Information
+                          </h4>
+                          <div className="space-y-2">
+                            <p className="text-sm"><span className="font-medium">Email:</span> {selectedClient.details.email}</p>
+                            <p className="text-sm"><span className="font-medium">Phone:</span> {selectedClient.details.phone}</p>
+                            <p className="text-sm"><span className="font-medium">Address:</span> {selectedClient.details.address}</p>
+                          </div>
                         </div>
                         
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Loan Details</p>
-                          <p className="text-sm">Amount: ${selectedClient.details.loanAmount.toLocaleString()}</p>
-                          <p className="text-sm">Type: {selectedClient.details.loanType}</p>
-                          <p className="text-sm">Property Value: ${selectedClient.details.propertyValue.toLocaleString()}</p>
-                          <p className="text-sm">Credit Score: {selectedClient.details.creditScore}</p>
+                        <div>
+                          <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <Building2 className="mr-2 h-4 w-4" />
+                            Property Details
+                          </h4>
+                          <div className="space-y-2">
+                            <p className="text-sm"><span className="font-medium">Type:</span> {selectedClient.details.propertyType}</p>
+                            <p className="text-sm"><span className="font-medium">Value:</span> ${selectedClient.details.propertyValue.toLocaleString()}</p>
+                            <p className="text-sm"><span className="font-medium">NOI:</span> ${selectedClient.details.noi?.toLocaleString()}</p>
+                            <p className="text-sm"><span className="font-medium">Cap Rate:</span> {selectedClient.details.capRate}%</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <DollarSign className="mr-2 h-4 w-4" />
+                            Loan Information
+                          </h4>
+                          <div className="space-y-2">
+                            <p className="text-sm"><span className="font-medium">Amount:</span> ${selectedClient.details.loanAmount.toLocaleString()}</p>
+                            <p className="text-sm"><span className="font-medium">Type:</span> {selectedClient.details.loanType}</p>
+                            <p className="text-sm"><span className="font-medium">Term:</span> {selectedClient.details.loanTerm} years</p>
+                            <p className="text-sm"><span className="font-medium">Rate:</span> {selectedClient.details.interestRate}%</p>
+                            <p className="text-sm"><span className="font-medium">LTV:</span> {selectedClient.details.ltv}%</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <ClipboardList className="mr-2 h-4 w-4" />
+                            Underwriting Metrics
+                          </h4>
+                          <div className="space-y-2">
+                            <p className="text-sm"><span className="font-medium">DSCR:</span> {selectedClient.details.dscr}x</p>
+                            <p className="text-sm"><span className="font-medium">Credit Score:</span> {selectedClient.details.creditScore}</p>
+                            <p className="text-sm"><span className="font-medium">Loan Status:</span> {currentStage.charAt(0).toUpperCase() + currentStage.slice(1)}</p>
+                          </div>
                         </div>
                       </div>
                       
-                      <Separator className="my-4" />
+                      <Separator className="my-6" />
                       
                       <div>
-                        <p className="text-sm font-medium mb-3">Upload Document</p>
-                        <DocumentUpload 
-                          title="Upload Document"
-                          description="Upload any additional documents required for processing"
-                          onUpload={handleUploadDocument}
-                        />
+                        <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Timeline
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <p className="text-sm font-medium">Application Received</p>
+                            <p className="text-xs text-gray-500">2023-10-15</p>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <p className="text-sm font-medium">Pre-Flight Review</p>
+                            <p className="text-xs text-gray-500">2023-10-22</p>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <p className="text-sm font-medium">LOI Issued</p>
+                            <p className="text-xs text-gray-500">2023-11-05</p>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <p className="text-sm font-medium">Underwriting Started</p>
+                            <p className="text-xs text-gray-500">2023-11-12</p>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md border border-[#a29f95]">
+                            <p className="text-sm font-medium">Estimated Closing</p>
+                            <p className="text-xs text-gray-500">2023-12-15</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </>
@@ -491,7 +675,23 @@ const Agent = () => {
             {/* Documents View */}
             {viewMode === 'documents' && (
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-xl font-medium mb-4">Documents</h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-medium">Documents</h2>
+                  <Button 
+                    size="sm"
+                    onClick={triggerDocumentUpload}
+                    className="bg-[#a29f95] hover:bg-[#8a8880]"
+                  >
+                    <FileUp className="h-4 w-4 mr-2" />
+                    Upload Document
+                  </Button>
+                  <input 
+                    type="file" 
+                    ref={documentInputRef} 
+                    className="hidden" 
+                    onChange={handleDocumentInputChange}
+                  />
+                </div>
                 
                 <div className="mb-6">
                   <DocumentUpload 
@@ -512,7 +712,7 @@ const Agent = () => {
                     {documents.map(doc => (
                       <div key={doc.id} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
                         <div className="flex items-center mb-2">
-                          <FileText className="h-5 w-5 mr-2 text-nano-blue" />
+                          <FileText className="h-5 w-5 mr-2 text-[#a29f95]" />
                           <span className="font-medium truncate">{doc.name}</span>
                         </div>
                         <div className="text-xs text-gray-500 mt-1">
@@ -556,7 +756,7 @@ const Agent = () => {
                         "rounded-lg p-4",
                         message.sender === 'agent' 
                           ? "bg-white border border-gray-200" 
-                          : "bg-nano-blue text-white"
+                          : "bg-[#a29f95] text-white"
                       )}>
                         {message.content}
                       </div>
@@ -568,6 +768,22 @@ const Agent = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+                
+                {/* Suggestions */}
+                <div className="mb-4">
+                  <p className="text-xs text-gray-500 mb-2">Suggestions:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {suggestionMessages.map((suggestion, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded-full"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 
                 <div className="mt-4 flex">
@@ -590,6 +806,16 @@ const Agent = () => {
                     Send
                   </Button>
                 </div>
+                
+                {/* Toggle Chat Button */}
+                {viewMode !== 'chat' && showChat && (
+                  <Button
+                    className="fixed bottom-4 right-4 rounded-full h-12 w-12 p-0 bg-[#a29f95]"
+                    onClick={() => setShowChat(true)}
+                  >
+                    <MessageCircle size={20} />
+                  </Button>
+                )}
               </div>
             )}
           </div>

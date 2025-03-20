@@ -40,11 +40,11 @@ const ProgressTracker = ({
           <div 
             key={stage.id} 
             onClick={() => onStageClick && onStageClick(stage.id)} 
-            className="flex flex-col items-center cursor-pointer z-10"
+            className="flex flex-col items-center cursor-pointer z-10 relative"
           >
             <div className={cn(
               "w-8 h-8 rounded-full flex items-center justify-center mb-2 z-10",
-              isCompleted ? "bg-[#a29f95]" : isActive ? "bg-nano-blue" : "bg-gray-200"
+              isCompleted ? "bg-[#a29f95]" : isActive ? "bg-[#a29f95]" : "bg-gray-200"
             )}>
               {isCompleted ? (
                 <CheckIcon className="h-4 w-4 text-white" />
@@ -58,8 +58,8 @@ const ProgressTracker = ({
               )}
             </div>
             <span className={cn(
-              "text-xs md:text-sm text-center",
-              isActive ? "text-nano-blue font-semibold" : 
+              "text-xs md:text-sm text-center absolute -bottom-6",
+              isActive ? "text-[#a29f95] font-semibold" : 
               isCompleted ? "text-[#a29f95] font-medium" : "text-gray-500"
             )}>
               {stage.label}
