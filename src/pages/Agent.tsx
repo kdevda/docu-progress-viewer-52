@@ -430,8 +430,8 @@ const Agent = () => {
         {/* Logo */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-center">
           <img 
-            src="/lovable-uploads/da4cffd1-9a5a-4e34-bbfd-377882856f5c.png" 
-            alt="Bank Logo" 
+            src="/lovable-uploads/d53d268c-e6c5-4abb-8df8-6ba865ad6ae0.png" 
+            alt="Nano Banc" 
             className="h-10 w-auto"
           />
         </div>
@@ -635,14 +635,6 @@ const Agent = () => {
         
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Progress Tracker */}
-          <div className="py-8 bg-white border-b border-gray-200">
-            <ProgressTracker 
-              currentStage={currentStage}
-              onStageClick={handleStageClick}
-            />
-          </div>
-          
           {/* View Mode Toggle */}
           <div className="bg-white border-b border-gray-200 px-6 py-2">
             <ToggleGroup 
@@ -803,6 +795,14 @@ const Agent = () => {
                 </div>
               </div>
             )}
+          </div>
+          
+          {/* Progress Tracker - moved to bottom */}
+          <div className="py-8 bg-white border-t border-gray-200 mt-auto">
+            <ProgressTracker 
+              currentStage={currentStage}
+              onStageClick={handleStageClick}
+            />
           </div>
         </div>
       </div>

@@ -6,7 +6,11 @@ const Navbar = () => {
   return (
     <nav className="bg-white border-b border-gray-200 w-full flex justify-between items-center h-16 px-6 z-10">
       <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-[#a29f95]">ABC Bank</h1>
+        <img 
+          src="/lovable-uploads/d53d268c-e6c5-4abb-8df8-6ba865ad6ae0.png" 
+          alt="Nano Banc" 
+          className="h-8 w-auto"
+        />
       </div>
       <div className="flex items-center space-x-4">
         <button className="p-2 text-gray-500 hover:text-[#a29f95] transition-colors duration-200">

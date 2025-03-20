@@ -28,9 +28,9 @@ const ProgressTracker = ({
   const currentIndex = stages.findIndex(stage => stage.id === currentStage);
   
   return (
-    <div className="flex justify-between w-full relative px-16">
+    <div className="flex justify-between w-full relative px-20">
       {/* Progress Line - positioned behind the circles */}
-      <div className="absolute top-4 left-16 right-16 h-1 bg-gray-200 z-0"></div>
+      <div className="absolute top-4 left-20 right-20 h-1 bg-gray-200 z-0"></div>
       
       {stages.map((stage, index) => {
         const isCompleted = index < currentIndex;
