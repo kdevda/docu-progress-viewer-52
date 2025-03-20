@@ -61,6 +61,7 @@ const Agent = () => {
       id: '119323096298',
       name: 'Harry Clare',
       dealId: '119323096298',
+      email: 'harry@example.com', // Added the email property
       recentChat: {
         preview: 'Need to submit additional documents for my application',
         timestamp: new Date()
@@ -79,6 +80,7 @@ const Agent = () => {
       id: '119323096299',
       name: 'James Hallacy',
       dealId: '119323096299',
+      email: 'james@uptig.ai', // Added the email property
       recentChat: {
         preview: 'Question about interest rate lock',
         timestamp: new Date()
