@@ -67,11 +67,25 @@ export default {
 					DEFAULT: '#004080',
 					light: '#f0f7ff',
 					accent: '#0078d4',
+					dark: '#002b57',
+					secondary: '#ff9d00',
+					tertiary: '#00b3a4',
+					neutral: '#f3f6f9',
 					progress: {
 						default: '#e6e6e6',
 						active: '#0078d4',
 						completed: '#4caf50'
 					}
+				},
+				nano: {
+					blue: '#1d3f7a',
+					orange: '#ff8a47',
+					green: '#00b88d',
+					navy: '#172a52',
+					lightblue: '#edf5ff',
+					gray: '#f2f2f2',
+					darkgray: '#4a4a4a',
+					white: '#ffffff'
 				}
 			},
 			borderRadius: {
