@@ -7,7 +7,7 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-200 w-full flex justify-between items-center h-16 px-6 z-10">
       <div className="flex items-center">
         <img 
-          src="/nano-logo.png" 
+          src="/lovable-uploads/d53d268c-e6c5-4abb-8df8-6ba865ad6ae0.png" 
           alt="Nano Banc" 
           className="h-8 w-auto"
         />
