@@ -61,9 +61,9 @@ const MemoView: React.FC<MemoViewProps> = ({ memoUrl, onUpload }) => {
           onDrop={handleDrop}
         >
           <FileText className="h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-xl font-medium mb-2">Upload Memo Document</h3>
+          <h3 className="text-xl font-medium mb-2">Upload Document</h3>
           <p className="text-gray-500 text-center mb-6">
-            Drag and drop your memo PDF here, or click to browse
+            Drag and drop your PDF document here, or click to browse
           </p>
           <Button onClick={triggerFileInput}>
             <Upload className="h-4 w-4 mr-2" />

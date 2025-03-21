@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,7 +38,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll'>('operating');
   const [selectedSourceDoc, setSelectedSourceDoc] = useState<string>("doc1");
   
-  // Sample ratios data
+  // Sample ratios data - expanded with more detailed entries
   const financialRatios: FinancialRatio[] = [
     { name: 'Working Capital', value: '$500,000', description: 'Current Assets - Current Liabilities' },
     { name: 'Current Ratio', value: '2.5x', description: 'Current Assets / Current Liabilities' },
@@ -49,9 +48,17 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     { name: 'DSCR (P&I, Nano Debt Only)', value: '2.34x', description: 'Net Operating Income / Debt Service (Principal & Interest)' },
     { name: 'DSCR (P&I, All Debt)', value: '1.28x', description: 'Net Operating Income / Total Debt Service' },
     { name: 'Tangible Net Worth', value: '$1,250,000', description: 'Total Assets - Intangible Assets - Total Liabilities' },
+    { name: 'Return on Assets (ROA)', value: '8.5%', description: 'Net Income / Total Assets' },
+    { name: 'Return on Equity (ROE)', value: '14.2%', description: 'Net Income / Shareholder Equity' },
+    { name: 'Operating Expense Ratio', value: '52.3%', description: 'Operating Expenses / Effective Gross Income' },
+    { name: 'Net Income Ratio', value: '40.0%', description: 'Net Income / Gross Revenue' },
+    { name: 'Leverage Ratio', value: '60.0%', description: 'Total Debt / Total Assets' },
+    { name: 'Interest Coverage Ratio', value: '3.6x', description: 'EBIT / Interest Expense' },
+    { name: 'Break-Even Ratio', value: '78.4%', description: '(Operating Expenses + Debt Service) / Gross Income' },
+    { name: 'Fixed Charge Coverage Ratio', value: '2.1x', description: '(EBITDA - CAPEX) / (Interest + Principal)' },
   ];
 
-  // Sample source documents
+  // Sample source documents - more detailed data
   const sourceDocuments: SourceDocument[] = [
     {
       id: "doc1",
@@ -59,7 +66,14 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       imageUrl: "/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png",
       extractedData: [
         { label: 'Annual Revenue', value: 1250000, source: 'Financial Statement.pdf' },
+        { label: 'Base Rental Income', value: 1125000, source: 'Financial Statement.pdf' },
+        { label: 'CAM Reimbursements', value: 125000, source: 'Financial Statement.pdf' },
         { label: 'Operating Expenses', value: 750000, source: 'Financial Statement.pdf' },
+        { label: 'Property Taxes', value: 175000, source: 'Financial Statement.pdf' },
+        { label: 'Insurance', value: 85000, source: 'Financial Statement.pdf' },
+        { label: 'Utilities', value: 210000, source: 'Financial Statement.pdf' },
+        { label: 'Maintenance', value: 155000, source: 'Financial Statement.pdf' },
+        { label: 'Management Fees', value: 125000, source: 'Financial Statement.pdf' },
         { label: 'Net Income', value: 500000, source: 'Financial Statement.pdf' }
       ]
     },
@@ -69,7 +83,14 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       imageUrl: "/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png",
       extractedData: [
         { label: 'Total Assets', value: 3750000, source: 'Balance Sheet.pdf' },
+        { label: 'Cash & Equivalents', value: 450000, source: 'Balance Sheet.pdf' },
+        { label: 'Accounts Receivable', value: 175000, source: 'Balance Sheet.pdf' },
+        { label: 'Land Value', value: 1250000, source: 'Balance Sheet.pdf' },
+        { label: 'Building Value', value: 1875000, source: 'Balance Sheet.pdf' },
         { label: 'Total Liabilities', value: 2250000, source: 'Balance Sheet.pdf' },
+        { label: 'Current Liabilities', value: 225000, source: 'Balance Sheet.pdf' },
+        { label: 'Long-term Debt', value: 2025000, source: 'Balance Sheet.pdf' },
+        { label: 'Total Equity', value: 1500000, source: 'Balance Sheet.pdf' },
         { label: 'Debt-to-Income Ratio', value: '0.60', source: 'Balance Sheet.pdf' }
       ]
     },
@@ -80,7 +101,31 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       extractedData: [
         { label: 'DSCR', value: '1.25', source: 'DSCR Analysis.pdf' },
         { label: 'Annual Debt Service', value: 287000, source: 'DSCR Analysis.pdf' },
-        { label: 'Net Operating Income', value: 359000, source: 'DSCR Analysis.pdf' }
+        { label: 'Principal Payments', value: 127000, source: 'DSCR Analysis.pdf' },
+        { label: 'Interest Payments', value: 160000, source: 'DSCR Analysis.pdf' },
+        { label: 'Net Operating Income', value: 359000, source: 'DSCR Analysis.pdf' },
+        { label: 'Proposed Debt Service', value: 250000, source: 'DSCR Analysis.pdf' },
+        { label: 'Combined DSCR', value: '1.07', source: 'DSCR Analysis.pdf' },
+        { label: 'Breakeven Occupancy', value: '82%', source: 'DSCR Analysis.pdf' },
+        { label: 'LTV Ratio', value: '65%', source: 'DSCR Analysis.pdf' },
+        { label: 'Amortization Period', value: '25 years', source: 'DSCR Analysis.pdf' }
+      ]
+    },
+    {
+      id: "doc4",
+      name: "25109 Jefferson Ave_Rent Roll.pdf",
+      imageUrl: "/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png",
+      extractedData: [
+        { label: 'Total Square Footage', value: '30,854 SF', source: 'Rent Roll.pdf' },
+        { label: 'Occupied Space', value: '28,694 SF', source: 'Rent Roll.pdf' },
+        { label: 'Vacant Space', value: '2,160 SF', source: 'Rent Roll.pdf' },
+        { label: 'Occupancy Rate', value: '93%', source: 'Rent Roll.pdf' },
+        { label: 'Average Base Rent/SF', value: '$23.85/SF', source: 'Rent Roll.pdf' },
+        { label: 'Number of Tenants', value: '12', source: 'Rent Roll.pdf' },
+        { label: 'Largest Tenant', value: 'Acme Corp (8,750 SF)', source: 'Rent Roll.pdf' },
+        { label: 'Average Lease Term', value: '5.2 years', source: 'Rent Roll.pdf' },
+        { label: 'Weighted Average Remaining Term', value: '3.8 years', source: 'Rent Roll.pdf' },
+        { label: 'Annual Escalations', value: '3%', source: 'Rent Roll.pdf' }
       ]
     }
   ];
@@ -145,12 +190,12 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       </div>
 
       <div className="flex flex-1 overflow-auto">
-        {/* Left side - financial spreads */}
-        <div className="w-2/5 pr-4 overflow-auto border-r border-gray-200">
+        {/* Left side - financial spreads - adjusted to take full width of column */}
+        <div className="w-1/2 pr-4 overflow-auto border-r border-gray-200">
           {activeView === 'simplified' ? (
             <>
               <h3 className="text-lg font-medium mb-4">Financial Ratios</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 {financialRatios.map((ratio, index) => (
                   <div 
                     key={index} 
@@ -201,38 +246,118 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">$25.99</td>
                         </tr>
                         <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Other</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$0</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$0.00</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$0</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$0.00</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$13,159</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$0.43</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">CAM & Reimbursements</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$120,450</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$3.90</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$124,063</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.02</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$128,965</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.18</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Parking Income</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$52,150</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.69</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$54,925</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.78</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$57,671</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.87</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Other Income</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$35,785</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.16</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$38,450</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.25</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$42,570</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.38</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50 font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Revenue</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$921,219</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$29.85</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$945,021</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$30.63</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,031,330</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$33.42</td>
                         </tr>
                         <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Expenses:</td>
-                          <td colSpan={6} className="border border-gray-200 bg-gray-50"></td>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Expenses:</td>
                         </tr>
                         <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Operating Expense</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Property Taxes</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($98,750)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.20)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($102,700)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.33)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($107,808)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.49)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Insurance</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($57,234)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($1.85)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($62,384)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.02)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($65,503)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.12)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Utilities</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($112,585)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.65)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($126,834)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.11)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($93,946)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.04)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Maintenance</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($95,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.08)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($120,750)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.91)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($80,500)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.61)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Management</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($65,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.11)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($67,600)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.19)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($70,304)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.28)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Other Expenses</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($40,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($1.30)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($99,450)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.22)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($30,196)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($0.98)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50 font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Expenses</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($468,569)</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">($15.18)</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($579,718)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($18.66)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($18.79)</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($448,257)</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">($14.53)</td>
                         </tr>
                         <tr>
                           <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Net Operating Income (NOI):</td>
                         </tr>
-                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'noi' })}>
+                        <tr className="cursor-pointer hover:bg-gray-50 font-medium">
                           <td className="border border-gray-200 px-4 py-2 text-sm font-medium">NOI</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$379,760</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$12.31</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$382,331</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$11.74</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$424,091</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$13.74</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$452,650</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$14.67</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$365,303</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$11.84</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$583,073</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$18.90</td>
                         </tr>
                       </>
                     )}
@@ -258,292 +383,4 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$65,321</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">$2.12</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$54,897</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.78</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Property & Equipment</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,450,000</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$111.76</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,450,000</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$111.76</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,500,000</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$113.40</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Liabilities:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Current Liabilities</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($125,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.05)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($142,500)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.62)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($139,750)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.53)</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Long-term Debt</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,100,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($68.05)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,050,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($66.44)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,000,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($64.82)</td>
-                        </tr>
-                      </>
-                    )}
-
-                    {statementType === 'cashflow' && (
-                      <>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Operating Activities:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Net Income</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$324,560</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$10.52</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$342,450</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$11.10</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$365,890</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$11.85</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Investing Activities:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Capital Expenditures</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($75,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.43)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($125,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.05)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($50,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($1.62)</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Financing Activities:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Debt Repayment</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($120,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.89)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($120,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.89)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($120,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.89)</td>
-                        </tr>
-                      </>
-                    )}
-
-                    {statementType === 'debtService' && (
-                      <>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Debt Service:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Principal & Interest (Existing)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($162,500)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($5.27)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($162,500)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($5.27)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($162,500)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($5.27)</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Proposed Debt Service</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">$0</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$0.00</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">$0</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$0.00</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($145,000)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.70)</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm font-medium">DSCR</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">2.34x</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">2.35x</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">1.38x</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">-</td>
-                        </tr>
-                      </>
-                    )}
-
-                    {statementType === 'propertyAnalysis' && (
-                      <>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Property Details:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Square Feet</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">30,854</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">30,854</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">30,854</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Occupancy Rate</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">92%</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">95%</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">98%</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Revenue per SF</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.10</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.58</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$25.99</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Expense per SF</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$15.18</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$18.66</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$14.53</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Cap Rate</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">5.8%</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">5.9%</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">6.2%</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                        </tr>
-                      </>
-                    )}
-
-                    {statementType === 'rentRoll' && (
-                      <>
-                        <tr>
-                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Rental Income:</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Suite 101 - Retail</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$98,450</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$24.50</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$100,419</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$24.99</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$102,427</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$25.49</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Suite 201 - Office</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$156,240</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$22.80</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$159,365</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.26</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$162,552</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.72</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Suite 301 - Office</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$143,472</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.40</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$146,341</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.87</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$149,268</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$24.34</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Suite 401 - Office</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$132,420</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$22.60</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$135,068</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.05</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$137,769</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.51</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">Vacancy</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($28,420)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($15,740)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($5,100)</td>
-                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">-</td>
-                        </tr>
-                      </>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-        </div>
-        
-        {/* Right side - source documents */}
-        <div className="w-3/5 pl-4 overflow-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium">Source Documents</h3>
-            <Select value={selectedSourceDoc} onValueChange={setSelectedSourceDoc}>
-              <SelectTrigger className="w-60">
-                <SelectValue placeholder="Select source document" />
-              </SelectTrigger>
-              <SelectContent>
-                {sourceDocuments.map(doc => (
-                  <SelectItem key={doc.id} value={doc.id}>{doc.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-            <div className="flex items-center mb-3">
-              <FileText className="h-5 w-5 mr-2 text-[#a29f95]" />
-              <span className="font-medium">{currentSourceDocument.name}</span>
-            </div>
-            <div className="aspect-[1.5/1] bg-gray-50 rounded-md border border-gray-200 overflow-hidden">
-              <img 
-                src={currentSourceDocument.imageUrl} 
-                alt="Financial Statement" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="bg-gray-50 p-3 rounded-md text-sm border border-gray-200 mt-3">
-              <p className="mb-2 text-gray-600">Extracted data from page 1:</p>
-              <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                {currentSourceDocument.extractedData.map((item, index) => (
-                  <li key={index}>
-                    {item.label}: {typeof item.value === 'number' ? 
-                      `$${item.value.toLocaleString()}` : item.value}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ToggleViewButton = ({ active, onClick, icon, label }: { 
-  active: boolean; 
-  onClick: () => void; 
-  icon: React.ReactNode;
-  label: string;
-}) => (
-  <button
-    onClick={onClick}
-    className={`flex items-center px-3 py-1.5 rounded-md text-sm ${
-      active 
-        ? 'bg-[#a29f95] text-white' 
-        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-    }`}
-  >
-    <span className="mr-1.5">{icon}</span>
-    {label}
-  </button>
-);
-
-export default SpreadView;
+                          <td className="border border-gray-200 px-4 py-

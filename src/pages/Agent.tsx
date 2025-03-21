@@ -764,19 +764,19 @@ const Agent = () => {
               
               {viewMode === 'memo' && (
                 <div className="w-full max-w-6xl mx-auto">
-                  <MemoView memoUrl={memoUrl} />
+                  <MemoView memoUrl={memoUrl} onUpload={handleMemoUpload} />
                 </div>
               )}
               
               {viewMode === 'pre-screen' && (
                 <div className="w-full max-w-6xl mx-auto">
-                  <MemoView memoUrl={preScreenUrl} />
+                  <MemoView memoUrl={preScreenUrl} onUpload={handlePreScreenUpload} />
                 </div>
               )}
               
               {viewMode === 'loi' && (
                 <div className="w-full max-w-6xl mx-auto">
-                  <MemoView memoUrl={loiUrl} />
+                  <MemoView memoUrl={loiUrl} onUpload={handleLoiUpload} />
                 </div>
               )}
               
