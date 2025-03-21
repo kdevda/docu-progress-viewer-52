@@ -250,7 +250,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
           {activeView === 'simplified' ? (
             <>
               <h3 className="text-lg font-medium mb-4">Financial Ratios</h3>
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {financialRatios.map((ratio, index) => (
                   <div 
                     key={index} 
