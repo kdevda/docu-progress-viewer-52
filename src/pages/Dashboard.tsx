@@ -308,7 +308,7 @@ const Dashboard = () => {
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div 
-                              className="bg-[#a29f95] h-2.5 rounded-full" 
+                              className="bg-[#20703F] h-2.5 rounded-full" 
                               style={{ width: `${selectedApplication.progress}%` }}
                             ></div>
                           </div>
@@ -336,7 +336,7 @@ const Dashboard = () => {
                       {selectedApplication && (
                         <>
                           <div>
-                            <h3 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h3 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <User className="mr-2 h-4 w-4" />
                               Borrower Details
                             </h3>
@@ -361,7 +361,7 @@ const Dashboard = () => {
                           </div>
 
                           <div className="mt-4">
-                            <h3 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h3 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <DollarSign className="mr-2 h-4 w-4" />
                               Loan Information
                             </h3>
@@ -398,7 +398,7 @@ const Dashboard = () => {
                           </div>
 
                           <div className="mt-4">
-                            <h3 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h3 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <Clock className="mr-2 h-4 w-4" />
                               Application Timeline
                             </h3>
