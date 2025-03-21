@@ -53,7 +53,7 @@ const ToggleViewButton: React.FC<ToggleViewButtonProps> = ({
       className={cn(
         "flex items-center px-3 py-2 text-sm font-medium rounded-md",
         active 
-          ? "bg-[#a29f95] text-white" 
+          ? "bg-[#20703F] text-white" 
           : "bg-gray-100 text-gray-600 hover:bg-gray-200"
       )}
       onClick={onClick}

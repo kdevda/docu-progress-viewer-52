@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -688,7 +687,12 @@ const Agent = () => {
                   <ToggleGroupItem 
                     key={mode.value} 
                     value={mode.value} 
-                    className="flex items-center gap-2"
+                    className={cn(
+                      "flex items-center gap-2",
+                      viewMode === mode.value 
+                        ? "bg-[#20703F] text-white [&_svg]:text-white" 
+                        : "data-[state=on]:bg-[#20703F] data-[state=on]:text-white [&_svg]:data-[state=on]:text-white"
+                    )}
                   >
                     {mode.icon}
                     <span>{mode.label}</span>
@@ -882,4 +886,3 @@ const Agent = () => {
 };
 
 export default Agent;
-
