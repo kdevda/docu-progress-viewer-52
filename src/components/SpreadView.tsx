@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -33,6 +34,36 @@ interface SpreadViewProps {
   spreads: SpreadItem[];
 }
 
+// Toggle Button Component
+interface ToggleViewButtonProps {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}
+
+const ToggleViewButton: React.FC<ToggleViewButtonProps> = ({
+  active,
+  onClick,
+  icon,
+  label
+}) => {
+  return (
+    <button
+      className={cn(
+        "flex items-center px-3 py-2 text-sm font-medium rounded-md",
+        active 
+          ? "bg-[#a29f95] text-white" 
+          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+      )}
+      onClick={onClick}
+    >
+      <span className="mr-2">{icon}</span>
+      {label}
+    </button>
+  );
+};
+
 const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const [activeView, setActiveView] = useState<'simplified' | 'detailed'>('simplified');
   const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll'>('operating');
@@ -56,6 +87,10 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     { name: 'Interest Coverage Ratio', value: '3.6x', description: 'EBIT / Interest Expense' },
     { name: 'Break-Even Ratio', value: '78.4%', description: '(Operating Expenses + Debt Service) / Gross Income' },
     { name: 'Fixed Charge Coverage Ratio', value: '2.1x', description: '(EBITDA - CAPEX) / (Interest + Principal)' },
+    { name: 'Cash-on-Cash Return', value: '9.2%', description: 'Annual Pre-Tax Cash Flow / Total Cash Invested' },
+    { name: 'Gross Rent Multiplier', value: '7.8x', description: 'Property Price / Annual Gross Rental Income' },
+    { name: 'Net Income Multiplier', value: '10.5x', description: 'Property Value / Net Operating Income' },
+    { name: 'Debt Yield', value: '11.7%', description: 'Net Operating Income / Loan Amount' },
   ];
 
   // Sample source documents - more detailed data
@@ -74,7 +109,12 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
         { label: 'Utilities', value: 210000, source: 'Financial Statement.pdf' },
         { label: 'Maintenance', value: 155000, source: 'Financial Statement.pdf' },
         { label: 'Management Fees', value: 125000, source: 'Financial Statement.pdf' },
-        { label: 'Net Income', value: 500000, source: 'Financial Statement.pdf' }
+        { label: 'Net Income', value: 500000, source: 'Financial Statement.pdf' },
+        { label: 'Occupancy Rate', value: '92%', source: 'Financial Statement.pdf' },
+        { label: 'Average Lease Term', value: '5.4 years', source: 'Financial Statement.pdf' },
+        { label: 'Total Square Footage', value: '30,854 SF', source: 'Financial Statement.pdf' },
+        { label: 'Average Base Rent/SF', value: '$36.46/SF', source: 'Financial Statement.pdf' },
+        { label: 'Capital Expenditures', value: 85000, source: 'Financial Statement.pdf' },
       ]
     },
     {
@@ -91,7 +131,12 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
         { label: 'Current Liabilities', value: 225000, source: 'Balance Sheet.pdf' },
         { label: 'Long-term Debt', value: 2025000, source: 'Balance Sheet.pdf' },
         { label: 'Total Equity', value: 1500000, source: 'Balance Sheet.pdf' },
-        { label: 'Debt-to-Income Ratio', value: '0.60', source: 'Balance Sheet.pdf' }
+        { label: 'Debt-to-Income Ratio', value: '0.60', source: 'Balance Sheet.pdf' },
+        { label: 'Working Capital', value: 400000, source: 'Balance Sheet.pdf' },
+        { label: 'Fixed Assets', value: 3125000, source: 'Balance Sheet.pdf' },
+        { label: 'Accumulated Depreciation', value: 375000, source: 'Balance Sheet.pdf' },
+        { label: 'Other Assets', value: 125000, source: 'Balance Sheet.pdf' },
+        { label: 'Retained Earnings', value: 875000, source: 'Balance Sheet.pdf' },
       ]
     },
     {
@@ -108,7 +153,12 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
         { label: 'Combined DSCR', value: '1.07', source: 'DSCR Analysis.pdf' },
         { label: 'Breakeven Occupancy', value: '82%', source: 'DSCR Analysis.pdf' },
         { label: 'LTV Ratio', value: '65%', source: 'DSCR Analysis.pdf' },
-        { label: 'Amortization Period', value: '25 years', source: 'DSCR Analysis.pdf' }
+        { label: 'Amortization Period', value: '25 years', source: 'DSCR Analysis.pdf' },
+        { label: 'Loan Term', value: '10 years', source: 'DSCR Analysis.pdf' },
+        { label: 'Interest Rate', value: '5.25%', source: 'DSCR Analysis.pdf' },
+        { label: 'Loan Amount', value: 2400000, source: 'DSCR Analysis.pdf' },
+        { label: 'Stress Test DSCR (200bps)', value: '0.95', source: 'DSCR Analysis.pdf' },
+        { label: 'Debt Yield', value: '14.96%', source: 'DSCR Analysis.pdf' },
       ]
     },
     {
@@ -125,7 +175,12 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
         { label: 'Largest Tenant', value: 'Acme Corp (8,750 SF)', source: 'Rent Roll.pdf' },
         { label: 'Average Lease Term', value: '5.2 years', source: 'Rent Roll.pdf' },
         { label: 'Weighted Average Remaining Term', value: '3.8 years', source: 'Rent Roll.pdf' },
-        { label: 'Annual Escalations', value: '3%', source: 'Rent Roll.pdf' }
+        { label: 'Annual Escalations', value: '3%', source: 'Rent Roll.pdf' },
+        { label: 'Total Annual Base Rent', value: 736369, source: 'Rent Roll.pdf' },
+        { label: 'Total Annual Additional Rent', value: 184730, source: 'Rent Roll.pdf' },
+        { label: 'Percentage of NNN Leases', value: '85%', source: 'Rent Roll.pdf' },
+        { label: 'Tenant Industry Diversity', value: 'High', source: 'Rent Roll.pdf' },
+        { label: 'Lease Expirations (Next 12 Mo)', value: '2 leases (4,200 SF)', source: 'Rent Roll.pdf' },
       ]
     }
   ];
@@ -190,8 +245,8 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       </div>
 
       <div className="flex flex-1 overflow-auto">
-        {/* Left side - financial spreads - adjusted to take full width of column */}
-        <div className="w-1/2 pr-4 overflow-auto border-r border-gray-200">
+        {/* Left side - financial ratios - take full width of column */}
+        <div className="w-full pr-4 overflow-auto">
           {activeView === 'simplified' ? (
             <>
               <h3 className="text-lg font-medium mb-4">Financial Ratios</h3>
@@ -383,4 +438,115 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$65,321</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">$2.12</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$54,897</td>
-                          <td className="border border-gray-200 px-4 py-
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.78</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Land</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,250,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$40.51</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,250,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$40.51</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,250,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$40.51</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Building & Improvements</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,875,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$60.77</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,975,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$64.01</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$2,125,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$68.87</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Other Assets</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$125,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.05</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$137,500</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.46</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$143,750</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.66</td>
+                        </tr>
+                        <tr className="font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Assets</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,582,863</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$116.12</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,740,277</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$121.23</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,919,436</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$127.03</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Liabilities:</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Current Liabilities</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($225,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($7.29)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($235,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($7.62)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($240,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($7.78)</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Long-term Debt</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,025,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($65.63)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($1,975,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($64.01)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($1,925,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($62.39)</td>
+                        </tr>
+                        <tr className="font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Liabilities</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,250,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($72.92)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,210,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($71.63)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,165,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($70.17)</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Equity:</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Owner's Equity</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$625,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$20.26</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$625,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$20.26</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$625,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$20.26</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Retained Earnings</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$707,863</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$22.94</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$905,277</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$29.34</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,129,436</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$36.61</td>
+                        </tr>
+                        <tr className="font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Equity</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,332,863</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$43.20</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,530,277</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$49.60</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,754,436</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$56.86</td>
+                        </tr>
+                      </>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SpreadView;
