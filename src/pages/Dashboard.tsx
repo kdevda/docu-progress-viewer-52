@@ -6,7 +6,7 @@ import ProductCard from '@/components/ProductCard';
 import DocumentUpload from '@/components/DocumentUpload';
 import ContactCard from '@/components/ContactCard';
 import { Task } from '@/components/TaskList';
-import { X, FileUp, Clock, CalendarClock, Building2, DollarSign, FileText, ChevronRight } from 'lucide-react';
+import { X, FileUp, Clock, CalendarClock, Building2, DollarSign, FileText, ChevronRight, User } from 'lucide-react';
 import { ApplicationStage } from '@/components/ProgressTracker';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
