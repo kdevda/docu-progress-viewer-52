@@ -867,8 +867,6 @@ const Agent = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-export default Agent;
+      
+      <div className="p-6 border-t border-gray-200 bg-white">
+       
