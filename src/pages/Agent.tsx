@@ -77,7 +77,6 @@ type Client = {
 
 type ViewMode = 'documents' | 'spreads' | 'memo' | 'chat' | 'pre-screen' | 'loi';
 
-// Suggested messages to display in the chat
 const suggestionMessages = [
   "Upload completed application to start new deal",
   "Request financial statements for underwriting",
@@ -249,7 +248,6 @@ const Agent = () => {
   const [documentInputRef] = useState<React.RefObject<HTMLInputElement>>(React.createRef());
   const [waitingForApplicationUpload, setWaitingForApplicationUpload] = useState(false);
 
-  // Sample financial spreads data
   const financialSpreads = [
     { label: 'Annual Revenue', value: 1250000, source: 'Financial Statement.pdf' },
     { label: 'Operating Expenses', value: 750000, source: 'Financial Statement.pdf' },
@@ -260,7 +258,6 @@ const Agent = () => {
   ];
 
   useEffect(() => {
-    // No need to fetch the PDFs as they're already included in public folder
   }, []);
 
   const handleSendMessage = () => {
@@ -276,11 +273,9 @@ const Agent = () => {
     setMessages([...messages, userMessage]);
     setNewMessage("");
     
-    // Check if message is about uploading a completed application
     if (newMessage.toLowerCase().includes("upload") && newMessage.toLowerCase().includes("application")) {
       setWaitingForApplicationUpload(true);
       
-      // Simulate agent response after a short delay
       setTimeout(() => {
         const agentResponse: Message = {
           id: (Date.now() + 1).toString(),
@@ -291,9 +286,7 @@ const Agent = () => {
         setMessages(prev => [...prev, agentResponse]);
       }, 1000);
     } else {
-      // Handle other messages
       setTimeout(() => {
-        // Different responses based on user message content
         let responseContent = "I'll help you with that. Let me check your application details.";
         
         if (newMessage.toLowerCase().includes("document") || newMessage.toLowerCase().includes("upload")) {
@@ -327,11 +320,9 @@ const Agent = () => {
     setDocuments(prev => [...prev, newDoc]);
     toast.success(`Document "${file.name}" uploaded successfully`);
     
-    // If we're waiting for an application upload, add a new client
     if (waitingForApplicationUpload) {
       setWaitingForApplicationUpload(false);
       
-      // Create a new client
       const newClient: Client = {
         id: `KD-${Date.now()}`,
         name: 'KD',
@@ -360,11 +351,9 @@ const Agent = () => {
         }
       };
       
-      // Add to clients list and select it
       setClients(prev => [newClient, ...prev]);
       setSelectedClient(newClient);
       
-      // Add agent response
       setTimeout(() => {
         const agentResponse: Message = {
           id: (Date.now() + 1).toString(),
@@ -391,8 +380,6 @@ const Agent = () => {
   };
 
   const handleMemoUpload = (file: File) => {
-    // In a real app, we would upload the file to a server and get a URL back
-    // For this demo, we'll create a temporary object URL
     const objectUrl = URL.createObjectURL(file);
     setMemoUrl(objectUrl);
     toast.success(`Memo "${file.name}" uploaded successfully`);
@@ -413,7 +400,6 @@ const Agent = () => {
   const handleStageClick = (stage: 'application' | 'pre-flight' | 'loi' | 'underwriting') => {
     setCurrentStage(stage);
     
-    // Set the appropriate view mode based on the selected stage
     if (stage === 'application') {
       setViewMode('chat');
       setShowChat(true);
@@ -429,10 +415,7 @@ const Agent = () => {
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      // In a real application, you would upload this file to your backend server
-      // For demonstration, we'll use URL.createObjectURL to show the image locally
-      const objectUrl = URL.createObjectURL(file);
-      setLogoUrl(objectUrl);
+      setLogoUrl(URL.createObjectURL(file));
       toast.success('Logo updated successfully');
     }
   };
@@ -455,13 +438,11 @@ const Agent = () => {
     setNewMessage(suggestion);
   };
 
-  // Filter clients based on search query
   const filteredClients = clients.filter(client => 
     client.name.toLowerCase().includes(clientSearchQuery.toLowerCase()) ||
     client.dealId.includes(clientSearchQuery)
   );
 
-  // Get available view modes based on current stage
   const getAvailableViewModes = () => {
     switch (currentStage) {
       case 'application':
@@ -494,9 +475,7 @@ const Agent = () => {
 
   return (
     <div className="flex h-screen bg-white overflow-hidden">
-      {/* Sidebar */}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
-        {/* Logo */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-center">
           <img 
             src="/lovable-uploads/d53d268c-e6c5-4abb-8df8-6ba865ad6ae0.png" 
@@ -505,7 +484,6 @@ const Agent = () => {
           />
         </div>
 
-        {/* New Chat Button */}
         <div className="p-4 border-b border-gray-200">
           <Button 
             className="w-full bg-[#a29f95] hover:bg-[#8a8880] text-white"
@@ -516,13 +494,11 @@ const Agent = () => {
           </Button>
         </div>
         
-        {/* Clients Section */}
         <div className="flex-1 overflow-auto p-4">
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-medium text-sm">Clients</h3>
               
-              {/* Client Search */}
               <div className="relative">
                 <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-gray-400" />
                 <Input
@@ -534,7 +510,6 @@ const Agent = () => {
               </div>
             </div>
             
-            {/* Client List */}
             <div className="space-y-3">
               {filteredClients.map(client => (
                 <div 
@@ -571,9 +546,7 @@ const Agent = () => {
         </div>
       </div>
       
-      {/* Main Content */}
       <div className="flex-1 flex flex-col h-full">
-        {/* Header Bar */}
         <div className="h-16 border-b border-gray-200 flex items-center justify-between px-6 bg-white">
           <h1 className="text-lg font-medium">
             {selectedClient ? (
@@ -702,9 +675,7 @@ const Agent = () => {
           </Sheet>
         </div>
         
-        {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* View Mode Toggle */}
           <div className="bg-white border-b border-gray-200 px-6 py-2">
             <ToggleGroup 
               type="single" 
@@ -724,9 +695,7 @@ const Agent = () => {
             </ToggleGroup>
           </div>
           
-          {/* Content Area */}
           <div className="flex-1 overflow-auto p-4">
-            {/* Documents View */}
             {viewMode === 'documents' && (
               <div className="max-w-4xl mx-auto">
                 <div className="flex justify-between items-center mb-4">
@@ -758,4 +727,148 @@ const Agent = () => {
                 {documents.length === 0 ? (
                   <div className="text-center p-8 bg-gray-50 rounded-lg border border-gray-200">
                     <FileText className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-                    <
+                    <p className="text-gray-500">No documents uploaded yet</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {documents.map(doc => (
+                      <div 
+                        key={doc.id}
+                        className="flex items-center justify-between bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center">
+                          <FileText className="h-5 w-5 text-gray-400 mr-3" />
+                          <div>
+                            <p className="text-sm font-medium">{doc.name}</p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(doc.uploadDate).toLocaleDateString()} • {Math.round(doc.size / 1024)} KB
+                            </p>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm">
+                          <span className="text-xs text-gray-600">View</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {viewMode === 'spreads' && (
+              <div className="w-full max-w-6xl mx-auto">
+                <SpreadView />
+              </div>
+            )}
+            
+            {viewMode === 'memo' && (
+              <div className="w-full max-w-6xl mx-auto">
+                <MemoView url={memoUrl} />
+              </div>
+            )}
+            
+            {viewMode === 'pre-screen' && (
+              <div className="w-full max-w-6xl mx-auto">
+                <MemoView url={preScreenUrl} />
+              </div>
+            )}
+            
+            {viewMode === 'loi' && (
+              <div className="w-full max-w-6xl mx-auto">
+                <MemoView url={loiUrl} />
+              </div>
+            )}
+            
+            {viewMode === 'chat' && (
+              <div className="flex flex-col h-full max-w-4xl mx-auto">
+                <div className="flex-1 overflow-y-auto pb-4">
+                  <div className="space-y-4">
+                    {messages.map(message => (
+                      <div 
+                        key={message.id}
+                        className={cn(
+                          "flex w-full",
+                          message.sender === 'user' ? "justify-end" : "justify-start"
+                        )}
+                      >
+                        <div 
+                          className={cn(
+                            "max-w-[80%] rounded-lg p-3",
+                            message.sender === 'user' 
+                              ? "bg-[#a29f95] text-white rounded-tr-none" 
+                              : "bg-gray-100 text-gray-800 rounded-tl-none"
+                          )}
+                        >
+                          {message.content}
+                          <div 
+                            className={cn(
+                              "text-xs mt-1",
+                              message.sender === 'user' ? "text-gray-200" : "text-gray-500"
+                            )}
+                          >
+                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {waitingForApplicationUpload && (
+                      <div className="mx-auto w-full max-w-md my-4">
+                        <DocumentUpload 
+                          title="Upload Application"
+                          description="Please upload your completed application document"
+                          onUpload={handleUploadDocument}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {suggestionMessages.map((suggestion, idx) => (
+                      <Button 
+                        key={idx} 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-xs text-gray-600 px-2 py-1 h-auto"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        {suggestion}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-end gap-2">
+                    <Textarea 
+                      placeholder="Type your message..."
+                      className="flex-1 resize-none"
+                      rows={3}
+                      value={newMessage}
+                      onChange={e => setNewMessage(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                    />
+                    <Button 
+                      className="bg-[#a29f95] hover:bg-[#8a8880] mb-[3px]"
+                      size="icon"
+                      onClick={handleSendMessage}
+                    >
+                      <Upload className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Agent;
