@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -479,15 +480,15 @@ const Agent = () => {
         <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
           <div className="p-4 border-b border-gray-200 flex items-center justify-center">
             <img 
-              src="/lovable-uploads/d53d268c-e6c5-4abb-8df8-6ba865ad6ae0.png" 
-              alt="Nano Banc" 
+              src="/lovable-uploads/6894aabf-3c80-4a2f-89ad-4e49519b9216.png" 
+              alt="Redwood Credit Union" 
               className="h-10 w-auto"
             />
           </div>
 
           <div className="p-4 border-b border-gray-200">
             <Button 
-              className="w-full bg-[#a29f95] hover:bg-[#8a8880] text-white"
+              className="w-full bg-[#20703F] hover:bg-[#155e32] text-white"
               onClick={handleNewChat}
             >
               <MessageSquarePlus className="mr-2 h-4 w-4" />
@@ -518,7 +519,7 @@ const Agent = () => {
                     className={cn(
                       "p-3 rounded-md cursor-pointer border transition-all",
                       selectedClient?.id === client.id 
-                        ? "bg-gray-50 border-[#a29f95]" 
+                        ? "bg-gray-50 border-[#20703F]" 
                         : "border-gray-100 hover:border-gray-200"
                     )}
                     onClick={() => setSelectedClient(client)}
@@ -527,7 +528,7 @@ const Agent = () => {
                       <span className="font-medium text-sm">Deal - {client.name}</span>
                       <div className={cn(
                         "w-3 h-3 rounded-full", 
-                        selectedClient?.id === client.id ? "bg-[#a29f95]" : "bg-gray-300"
+                        selectedClient?.id === client.id ? "bg-[#20703F]" : "bg-gray-300"
                       )} />
                     </div>
                     <div className="flex flex-col">
@@ -567,7 +568,7 @@ const Agent = () => {
                   {selectedClient ? (
                     <>
                       <div className="flex items-center space-x-4 pb-4">
-                        <div className="h-12 w-12 rounded-full bg-[#a29f95] text-white flex items-center justify-center">
+                        <div className="h-12 w-12 rounded-full bg-[#20703F] text-white flex items-center justify-center">
                           <span className="font-medium">
                             {selectedClient.name.split(' ').map(n => n[0]).join('')}
                           </span>
@@ -583,7 +584,7 @@ const Agent = () => {
                       <div className="flex-1 overflow-auto">
                         <div className="grid grid-cols-2 gap-6">
                           <div>
-                            <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h4 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <User className="mr-2 h-4 w-4" /> 
                               Contact Information
                             </h4>
@@ -595,7 +596,7 @@ const Agent = () => {
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h4 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <Building2 className="mr-2 h-4 w-4" />
                               Property Details
                             </h4>
@@ -608,7 +609,7 @@ const Agent = () => {
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h4 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <DollarSign className="mr-2 h-4 w-4" />
                               Loan Information
                             </h4>
@@ -622,7 +623,7 @@ const Agent = () => {
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                            <h4 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                               <ClipboardList className="mr-2 h-4 w-4" />
                               Underwriting Metrics
                             </h4>
@@ -637,7 +638,7 @@ const Agent = () => {
                         <Separator className="my-6" />
                         
                         <div>
-                          <h4 className="text-sm font-medium text-[#a29f95] mb-3 flex items-center">
+                          <h4 className="text-sm font-medium text-[#20703F] mb-3 flex items-center">
                             <Calendar className="mr-2 h-4 w-4" />
                             Timeline
                           </h4>
@@ -658,7 +659,7 @@ const Agent = () => {
                               <p className="text-sm font-medium">Underwriting Started</p>
                               <p className="text-xs text-gray-500">2023-11-12</p>
                             </div>
-                            <div className="bg-gray-50 p-3 rounded-md border border-[#a29f95]">
+                            <div className="bg-gray-50 p-3 rounded-md border border-[#20703F]">
                               <p className="text-sm font-medium">Estimated Closing</p>
                               <p className="text-xs text-gray-500">2023-12-15</p>
                             </div>
@@ -704,7 +705,7 @@ const Agent = () => {
                     <Button 
                       size="sm"
                       onClick={triggerDocumentUpload}
-                      className="bg-[#a29f95] hover:bg-[#8a8880]"
+                      className="bg-[#20703F] hover:bg-[#155e32]"
                     >
                       <FileUp className="h-4 w-4 mr-2" />
                       Upload Document
@@ -796,7 +797,7 @@ const Agent = () => {
                             className={cn(
                               "max-w-[80%] rounded-lg p-3",
                               message.sender === 'user' 
-                                ? "bg-[#a29f95] text-white rounded-tr-none" 
+                                ? "bg-[#20703F] text-white rounded-tr-none" 
                                 : "bg-gray-100 text-gray-800 rounded-tl-none"
                             )}
                           >
@@ -855,7 +856,7 @@ const Agent = () => {
                         }}
                       />
                       <Button 
-                        className="bg-[#a29f95] hover:bg-[#8a8880] mb-[3px]"
+                        className="bg-[#20703F] hover:bg-[#155e32] mb-[3px]"
                         size="icon"
                         onClick={handleSendMessage}
                       >
