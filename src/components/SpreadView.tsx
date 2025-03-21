@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -183,4 +184,100 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const currentSourceDocument = sourceDocuments.find(doc => doc.id === selectedSourceDoc) || sourceDocuments[0];
 
   const handleStatementClick = (rowData: any) => {
-    const
+    console.log('Statement row clicked:', rowData);
+    // Implementation can be added here as needed
+  };
+
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <Tabs defaultValue="simplified" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="simplified">Simplified</TabsTrigger>
+          <TabsTrigger value="statementView">Statement View</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="simplified" className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">Financial Ratios</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            {financialRatios.slice(0, 10).map((ratio, index) => (
+              <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-500">{ratio.name}</h3>
+                <p className="text-xl font-bold text-[#20703F]">{ratio.value}</p>
+                {ratio.description && (
+                  <p className="text-xs text-gray-400 mt-1">{ratio.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="statementView">
+          <div className="flex gap-2 mb-4">
+            {statementTypes.map((type) => (
+              <ToggleViewButton
+                key={type.id}
+                icon={type.icon}
+                label={type.label}
+                active={statementType === type.id}
+                onClick={() => setStatementType(type.id as any)}
+              />
+            ))}
+          </div>
+          
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">{statementType.charAt(0).toUpperCase() + statementType.slice(1)} Statement</h2>
+            <Select value={selectedSourceDoc} onValueChange={setSelectedSourceDoc}>
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Select Document" />
+              </SelectTrigger>
+              <SelectContent>
+                {sourceDocuments.map(doc => (
+                  <SelectItem key={doc.id} value={doc.id}>
+                    <div className="flex items-center">
+                      <FileText size={16} className="mr-2" />
+                      {doc.name}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Line Item</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentSourceDocument.extractedData.map((item, index) => (
+                  <tr 
+                    key={index} 
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleStatementClick(item)}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.label}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {typeof item.value === 'number' ? new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(item.value) : item.value}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.source}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default SpreadView;
