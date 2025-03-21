@@ -757,25 +757,25 @@ const Agent = () => {
             
             {viewMode === 'spreads' && (
               <div className="w-full max-w-6xl mx-auto">
-                <SpreadView />
+                <SpreadView spreads={financialSpreads} />
               </div>
             )}
             
             {viewMode === 'memo' && (
               <div className="w-full max-w-6xl mx-auto">
-                <MemoView url={memoUrl} />
+                <MemoView memoUrl={memoUrl} />
               </div>
             )}
             
             {viewMode === 'pre-screen' && (
               <div className="w-full max-w-6xl mx-auto">
-                <MemoView url={preScreenUrl} />
+                <MemoView memoUrl={preScreenUrl} />
               </div>
             )}
             
             {viewMode === 'loi' && (
               <div className="w-full max-w-6xl mx-auto">
-                <MemoView url={loiUrl} />
+                <MemoView memoUrl={loiUrl} />
               </div>
             )}
             

@@ -7,13 +7,13 @@ import ContactCard from '@/components/ContactCard';
 import { Task } from '@/components/TaskList';
 import { X, FileUp, Clock, CalendarClock, Building2, DollarSign, FileText, ChevronRight, User } from 'lucide-react';
 import { ApplicationStage } from '@/components/ProgressTracker';
+import ProgressTracker from '@/components/ProgressTracker';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
-// Mock data
 const initialTasks: Task[] = [
   { id: 'upload-documents', title: 'Upload Documents', completed: false, count: 3 },
   { id: 'verify-information', title: 'Verify Information', completed: true },
