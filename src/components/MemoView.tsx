@@ -47,7 +47,7 @@ const MemoView: React.FC<MemoViewProps> = ({ memoUrl, onUpload }) => {
       {memoUrl ? (
         <iframe
           src={memoUrl}
-          className="w-full h-[85vh] border-0" // Increased height for better readability
+          className="w-full h-full border-0"
           title="Memo Document"
         />
       ) : (
