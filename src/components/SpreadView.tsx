@@ -258,7 +258,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                     onClick={() => handleStatementClick(ratio)}
                   >
                     <div className="text-sm text-gray-500 mb-1">{ratio.name}</div>
-                    <div className="text-lg font-medium text-[#a29f95]">{ratio.value}</div>
+                    <div className="text-lg font-medium text-[#20703F]">{ratio.value}</div>
                     {ratio.description && (
                       <div className="text-xs text-gray-400 mt-1">{ratio.description}</div>
                     )}
