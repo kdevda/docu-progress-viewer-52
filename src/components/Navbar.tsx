@@ -7,7 +7,7 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-200 w-full flex justify-between items-center h-16 px-6 z-10">
       <div className="flex items-center">
         <img 
-          src="/lovable-uploads/ceee5d24-3cd3-42e9-ae9d-6702f856643f.png" 
+          src="/lovable-uploads/6894aabf-3c80-4a2f-89ad-4e49519b9216.png" 
           alt="Redwood Credit Union" 
           className="h-8 w-auto"
         />

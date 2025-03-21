@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -118,11 +119,11 @@
 
 .progress-stage.active::before,
 .progress-stage.completed::before {
-  background-color: theme('colors.nano.blue');
+  background-color: #20703F;
 }
 
 .progress-stage.completed::before {
-  background-color: #a29f95;
+  background-color: #20703F;
 }
 
 .arrow-box {
@@ -163,8 +164,8 @@
 }
 
 .file-drop-area.dragging {
-  border-color: theme('colors.nano.green');
-  background-color: theme('colors.nano.lightblue');
+  border-color: #20703F;
+  background-color: rgba(32, 112, 63, 0.1);
 }
 
 @keyframes shimmer {
