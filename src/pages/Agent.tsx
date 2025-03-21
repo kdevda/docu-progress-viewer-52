@@ -763,25 +763,7 @@ const Agent = () => {
               
               {viewMode === 'spreads' && (
                 <div className="w-full max-w-6xl mx-auto">
-                  <div className="mb-6">
-                    <h2 className="text-xl font-medium mb-4">Financial Spreads</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {financialSpreads.map((item, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow p-4 border border-gray-100">
-                          <p className="text-sm text-gray-500 mb-1">
-                            {item.label}
-                            <span className="text-xs ml-2 text-gray-400">Source: {item.source}</span>
-                          </p>
-                          <p className="text-2xl font-semibold text-[#20703F]">
-                            {typeof item.value === 'number' ? 
-                              `$${item.value.toLocaleString()}` : 
-                              item.value
-                            }
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <SpreadView spreads={financialSpreads} />
                 </div>
               )}
               

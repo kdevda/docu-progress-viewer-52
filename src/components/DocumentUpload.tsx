@@ -80,8 +80,7 @@ const DocumentUpload = ({
     }
   };
 
-  const clearFile = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const clearFile = () => {
     setFile(null);
     setStatus('idle');
     if (fileInputRef.current) {
@@ -98,7 +97,7 @@ const DocumentUpload = ({
         <div 
           className={cn(
             "file-drop-area p-6 rounded-md text-center cursor-pointer transition-all",
-            isDragging ? "border-2 border-dashed border-[#20703F] bg-[#20703F]/10" : "border-2 border-dashed border-gray-300"
+            isDragging && "dragging"
           )}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -107,7 +106,7 @@ const DocumentUpload = ({
         >
           <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
           <p className="text-sm font-medium text-gray-600">
-            Drag and drop a file, or <span className="text-[#20703F]">browse</span>
+            Drag and drop a file, or <span className="text-bank-accent">browse</span>
           </p>
           <p className="text-xs text-gray-500 mt-1">
             Supported formats: PDF, DOC, DOCX, JPG, PNG
@@ -123,8 +122,8 @@ const DocumentUpload = ({
       ) : (
         <div className="border rounded-md p-3 bg-gray-50 flex items-center justify-between">
           <div className="flex items-center">
-            <div className="h-10 w-10 rounded-md bg-[#20703F]/10 flex items-center justify-center mr-3">
-              <FileText className="h-5 w-5 text-[#20703F]" />
+            <div className="h-10 w-10 rounded-md bg-bank-light flex items-center justify-center mr-3">
+              <FileText className="h-5 w-5 text-bank-accent" />
             </div>
             <div className="overflow-hidden">
               <p className="text-sm font-medium text-gray-800 truncate">{file.name}</p>
@@ -133,7 +132,7 @@ const DocumentUpload = ({
           </div>
           <div className="flex items-center">
             {status === 'uploading' && (
-              <div className="h-4 w-4 border-2 border-t-[#20703F] rounded-full animate-spin mr-2"></div>
+              <div className="h-4 w-4 border-2 border-t-bank-accent rounded-full animate-spin mr-2"></div>
             )}
             {status === 'success' && (
               <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
@@ -142,7 +141,10 @@ const DocumentUpload = ({
               <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
             )}
             <button 
-              onClick={clearFile}
+              onClick={(e) => {
+                e.stopPropagation();
+                clearFile();
+              }}
               className="p-1 rounded-full hover:bg-gray-200 transition-colors"
             >
               <X className="h-4 w-4 text-gray-500" />
