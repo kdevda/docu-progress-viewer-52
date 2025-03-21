@@ -64,25 +64,25 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				bank: {
-					DEFAULT: '#004080',
-					light: '#f0f7ff',
-					accent: '#0078d4',
-					dark: '#002b57',
-					secondary: '#ff9d00',
-					tertiary: '#00b3a4',
+					DEFAULT: '#20703F',
+					light: '#e6f0eb',
+					accent: '#20703F',
+					dark: '#155e32',
+					secondary: '#20703F',
+					tertiary: '#20703F',
 					neutral: '#f3f6f9',
 					progress: {
 						default: '#e6e6e6',
-						active: '#0078d4',
-						completed: '#a29f95'  // Changed from green to the requested color
+						active: '#20703F',
+						completed: '#20703F'
 					}
 				},
 				nano: {
-					blue: '#1d3f7a',
-					orange: '#ff8a47',
-					green: '#a29f95',  // Changed from green to the requested color
-					navy: '#172a52',
-					lightblue: '#ffffff', // Changed to white
+					blue: '#20703F',
+					orange: '#20703F',
+					green: '#20703F',
+					navy: '#20703F',
+					lightblue: '#e6f0eb',
 					gray: '#f2f2f2',
 					darkgray: '#4a4a4a',
 					white: '#ffffff'

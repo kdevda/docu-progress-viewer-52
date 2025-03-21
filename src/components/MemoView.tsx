@@ -54,7 +54,7 @@ const MemoView: React.FC<MemoViewProps> = ({ memoUrl, onUpload }) => {
         <div 
           className={cn(
             "flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg w-full max-w-lg mx-auto",
-            isDragging ? "border-nano-blue bg-nano-lightblue" : "border-gray-300"
+            isDragging ? "border-[#20703F] bg-[#20703F]/10" : "border-gray-300"
           )}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -65,7 +65,10 @@ const MemoView: React.FC<MemoViewProps> = ({ memoUrl, onUpload }) => {
           <p className="text-gray-500 text-center mb-6">
             Drag and drop your PDF document here, or click to browse
           </p>
-          <Button onClick={triggerFileInput}>
+          <Button 
+            onClick={triggerFileInput}
+            className="bg-[#20703F] hover:bg-[#20703F]/90 text-white"
+          >
             <Upload className="h-4 w-4 mr-2" />
             Select File
           </Button>

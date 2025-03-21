@@ -44,7 +44,7 @@ const ProgressTracker = ({
           >
             <div className={cn(
               "w-8 h-8 rounded-full flex items-center justify-center mb-2 z-10",
-              isCompleted ? "bg-[#a29f95]" : isActive ? "bg-[#a29f95]" : "bg-gray-200"
+              isCompleted ? "bg-[#20703F]" : isActive ? "bg-[#20703F]" : "bg-gray-200"
             )}>
               {isCompleted ? (
                 <CheckIcon className="h-4 w-4 text-white" />
@@ -59,8 +59,8 @@ const ProgressTracker = ({
             </div>
             <span className={cn(
               "text-xs md:text-sm whitespace-nowrap absolute -bottom-6",
-              isActive ? "text-[#a29f95] font-semibold" : 
-              isCompleted ? "text-[#a29f95] font-medium" : "text-gray-500"
+              isActive ? "text-[#20703F] font-semibold" : 
+              isCompleted ? "text-[#20703F] font-medium" : "text-gray-500"
             )}>
               {stage.label}
             </span>

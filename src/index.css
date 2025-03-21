@@ -13,16 +13,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 217 90% 30%; /* Nano blue */
+    --primary: 146 54% 28%; /* Redwood green #20703F */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 27 100% 64%; /* Nano orange */
+    --secondary: 146 54% 28%; /* Redwood green #20703F */
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 41 7% 63%; /* Changed from Nano green to #a29f95 */
+    --accent: 146 54% 28%; /* Redwood green #20703F */
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -163,7 +163,7 @@
 }
 
 .file-drop-area.dragging {
-  border-color: theme('colors.nano.orange');
+  border-color: theme('colors.nano.green');
   background-color: theme('colors.nano.lightblue');
 }
 
