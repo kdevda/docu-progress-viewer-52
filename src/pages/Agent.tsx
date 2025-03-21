@@ -1,5 +1,4 @@
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -242,12 +241,13 @@ const Agent = () => {
   const [clientSearchQuery, setClientSearchQuery] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [memoUrl, setMemoUrl] = useState<string | undefined>(undefined);
-  const [preScreenUrl, setPreScreenUrl] = useState<string | undefined>(undefined);
-  const [loiUrl, setLoiUrl] = useState<string | undefined>(undefined);
+  const [memoUrl, setMemoUrl] = useState<string | undefined>("/Credit Memo.pdf");
+  const [preScreenUrl, setPreScreenUrl] = useState<string | undefined>("/Pre-Screen Summary.pdf");
+  const [loiUrl, setLoiUrl] = useState<string | undefined>("/LOI.pdf");
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoUrl, setLogoUrl] = useState<string>("/lovable-uploads/da4cffd1-9a5a-4e34-bbfd-377882856f5c.png");
   const [documentInputRef] = useState<React.RefObject<HTMLInputElement>>(React.createRef());
+  const [waitingForApplicationUpload, setWaitingForApplicationUpload] = useState(false);
 
   // Sample financial spreads data
   const financialSpreads = [
@@ -258,6 +258,10 @@ const Agent = () => {
     { label: 'Total Liabilities', value: 2250000, source: 'Financial Statement.pdf' },
     { label: 'Debt-to-Income Ratio', value: '0.60', source: 'Financial Statement.pdf' },
   ];
+
+  useEffect(() => {
+    // No need to fetch the PDFs as they're already included in public folder
+  }, []);
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
@@ -272,27 +276,43 @@ const Agent = () => {
     setMessages([...messages, userMessage]);
     setNewMessage("");
     
-    // Simulate agent response after a short delay
-    setTimeout(() => {
-      // Different responses based on user message content
-      let responseContent = "I'll help you with that. Let me check your application details.";
+    // Check if message is about uploading a completed application
+    if (newMessage.toLowerCase().includes("upload") && newMessage.toLowerCase().includes("application")) {
+      setWaitingForApplicationUpload(true);
       
-      if (newMessage.toLowerCase().includes("document") || newMessage.toLowerCase().includes("upload")) {
-        responseContent = "You can upload documents directly using the document tab. Would you like me to guide you through the process?";
-      } else if (newMessage.toLowerCase().includes("rate") || newMessage.toLowerCase().includes("interest")) {
-        responseContent = "Current interest rates for commercial real estate loans are between 4.5% and 6.25% depending on the property type, loan term, and borrower creditworthiness. Would you like more specific information?";
-      } else if (newMessage.toLowerCase().includes("timeline") || newMessage.toLowerCase().includes("process")) {
-        responseContent = "Our typical processing timeline is 45-60 days from application to closing. We're currently in the underwriting phase for this deal, which usually takes 2-3 weeks.";
-      }
-      
-      const agentResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        content: responseContent,
-        sender: 'agent',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, agentResponse]);
-    }, 1000);
+      // Simulate agent response after a short delay
+      setTimeout(() => {
+        const agentResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: "Please upload your completed application document. You can drag and drop the file below or click to browse.",
+          sender: 'agent',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, agentResponse]);
+      }, 1000);
+    } else {
+      // Handle other messages
+      setTimeout(() => {
+        // Different responses based on user message content
+        let responseContent = "I'll help you with that. Let me check your application details.";
+        
+        if (newMessage.toLowerCase().includes("document") || newMessage.toLowerCase().includes("upload")) {
+          responseContent = "You can upload documents directly using the document tab. Would you like me to guide you through the process?";
+        } else if (newMessage.toLowerCase().includes("rate") || newMessage.toLowerCase().includes("interest")) {
+          responseContent = "Current interest rates for commercial real estate loans are between 4.5% and 6.25% depending on the property type, loan term, and borrower creditworthiness. Would you like more specific information?";
+        } else if (newMessage.toLowerCase().includes("timeline") || newMessage.toLowerCase().includes("process")) {
+          responseContent = "Our typical processing timeline is 45-60 days from application to closing. We're currently in the underwriting phase for this deal, which usually takes 2-3 weeks.";
+        }
+        
+        const agentResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: responseContent,
+          sender: 'agent',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, agentResponse]);
+      }, 1000);
+    }
   };
 
   const handleUploadDocument = (file: File) => {
@@ -306,6 +326,55 @@ const Agent = () => {
     
     setDocuments(prev => [...prev, newDoc]);
     toast.success(`Document "${file.name}" uploaded successfully`);
+    
+    // If we're waiting for an application upload, add a new client
+    if (waitingForApplicationUpload) {
+      setWaitingForApplicationUpload(false);
+      
+      // Create a new client
+      const newClient: Client = {
+        id: `KD-${Date.now()}`,
+        name: 'KD',
+        dealId: `KD-${Date.now()}`,
+        email: 'kd@example.com',
+        loanAmount: 500000,
+        recentChat: {
+          preview: 'Uploaded completed application',
+          timestamp: new Date()
+        },
+        details: {
+          email: 'kd@example.com',
+          phone: '(555) 987-6543',
+          address: '567 Oak Dr, Somewhere, CA 92101',
+          loanAmount: 500000,
+          loanType: 'Commercial Mortgage',
+          propertyValue: 625000,
+          creditScore: 740,
+          propertyType: 'Office Building',
+          loanTerm: 25,
+          interestRate: 5.5,
+          ltv: 80,
+          noi: 75000,
+          capRate: 7.2,
+          dscr: 1.4
+        }
+      };
+      
+      // Add to clients list and select it
+      setClients(prev => [newClient, ...prev]);
+      setSelectedClient(newClient);
+      
+      // Add agent response
+      setTimeout(() => {
+        const agentResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: "Thank you for your application! I've created a new deal for you. Please upload the financial documents for spreading and analysis.",
+          sender: 'agent',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, agentResponse]);
+      }, 1000);
+    }
   };
 
   const handleNewChat = () => {
@@ -689,125 +758,4 @@ const Agent = () => {
                 {documents.length === 0 ? (
                   <div className="text-center p-8 bg-gray-50 rounded-lg border border-gray-200">
                     <FileText className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-                    <p className="text-gray-500">No documents uploaded yet</p>
-                    <p className="text-sm text-gray-400 mt-1">Upload documents to get started</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {documents.map(doc => (
-                      <div key={doc.id} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-                        <div className="flex items-center mb-2">
-                          <FileText className="h-5 w-5 mr-2 text-[#a29f95]" />
-                          <span className="font-medium truncate">{doc.name}</span>
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                          Uploaded on {new Date(doc.uploadDate).toLocaleDateString()}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {(doc.size / 1024).toFixed(0)} KB
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-            
-            {/* Spreads View */}
-            {viewMode === 'spreads' && <SpreadView spreads={financialSpreads} />}
-            
-            {/* Memo View */}
-            {viewMode === 'memo' && <MemoView memoUrl={memoUrl} onUpload={handleMemoUpload} />}
-            
-            {/* Pre-Screen View */}
-            {viewMode === 'pre-screen' && <MemoView memoUrl={preScreenUrl} onUpload={handlePreScreenUpload} />}
-            
-            {/* LOI View */}
-            {viewMode === 'loi' && <MemoView memoUrl={loiUrl} onUpload={handleLoiUpload} />}
-            
-            {/* Chat View */}
-            {viewMode === 'chat' && (
-              <div className="max-w-4xl mx-auto h-full flex flex-col">
-                <div className="flex-1 overflow-auto">
-                  {messages.map(message => (
-                    <div 
-                      key={message.id}
-                      className={cn(
-                        "mb-4 max-w-[80%]",
-                        message.sender === 'agent' ? "mr-auto" : "ml-auto"
-                      )}
-                    >
-                      <div className={cn(
-                        "rounded-lg p-4",
-                        message.sender === 'agent' 
-                          ? "bg-white border border-gray-200" 
-                          : "bg-[#a29f95] text-white"
-                      )}>
-                        {message.content}
-                      </div>
-                      <div className={cn(
-                        "text-xs mt-1",
-                        message.sender === 'user' ? "text-right" : ""
-                      )}>
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Suggestions */}
-                {messages.length < 3 && (
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-500 mb-2">Suggested messages:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {suggestionMessages.map((suggestion, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          size="sm"
-                          className="text-xs"
-                          onClick={() => handleSuggestionClick(suggestion)}
-                        >
-                          {suggestion}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Message Input */}
-                <div className="mt-auto border-t border-gray-200 pt-4">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Type your message..."
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      className="flex-1"
-                    />
-                    <Button 
-                      onClick={handleSendMessage} 
-                      className="bg-[#a29f95] hover:bg-[#8a8880]"
-                    >
-                      Send
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          {/* Progress Tracker - moved to bottom */}
-          <div className="py-8 bg-white border-t border-gray-200 mt-auto">
-            <ProgressTracker 
-              currentStage={currentStage}
-              onStageClick={handleStageClick}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Agent;
+                    <

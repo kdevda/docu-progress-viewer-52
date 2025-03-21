@@ -18,12 +18,12 @@ interface TaskListProps {
 
 const TaskList = ({ tasks, onTaskClick }: TaskListProps) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden animate-fade-in">
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       {tasks.map((task, index) => (
         <div 
           key={task.id}
           className={cn(
-            "flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-gray-50 transition-colors",
+            "flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors",
             index !== tasks.length - 1 && "border-b border-gray-100"
           )}
           onClick={() => onTaskClick(task.id)}

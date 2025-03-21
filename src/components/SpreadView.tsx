@@ -1,7 +1,15 @@
 
 import React, { useState } from 'react';
-import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart } from 'lucide-react';
+import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface SpreadItem {
   label: string;
@@ -15,6 +23,13 @@ interface FinancialRatio {
   description?: string;
 }
 
+interface SourceDocument {
+  id: string;
+  name: string;
+  imageUrl: string;
+  extractedData: SpreadItem[];
+}
+
 interface SpreadViewProps {
   spreads: SpreadItem[];
 }
@@ -22,17 +37,52 @@ interface SpreadViewProps {
 const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const [activeView, setActiveView] = useState<'simplified' | 'detailed'>('simplified');
   const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll'>('operating');
+  const [selectedSourceDoc, setSelectedSourceDoc] = useState<string>("doc1");
   
   // Sample ratios data
   const financialRatios: FinancialRatio[] = [
     { name: 'Working Capital', value: '$500,000', description: 'Current Assets - Current Liabilities' },
     { name: 'Current Ratio', value: '2.5x', description: 'Current Assets / Current Liabilities' },
-    { name: 'Quick Ratio', value: '1.8x', description: '(Cash + Accounts Receivable) / Current Liabilities' },
+    { name: 'Quick Ratio', value: '1.8x', description: 'Liquid Assets / Current Liabilities' },
     { name: 'Liquidity Ratio', value: '3.2x', description: 'Total Assets / Total Liabilities' },
     { name: 'Debt-to-Equity Ratio', value: '0.7x', description: 'Total Debt / Shareholder Equity' },
     { name: 'DSCR (P&I, Nano Debt Only)', value: '2.34x', description: 'Net Operating Income / Debt Service (Principal & Interest)' },
     { name: 'DSCR (P&I, All Debt)', value: '1.28x', description: 'Net Operating Income / Total Debt Service' },
     { name: 'Tangible Net Worth', value: '$1,250,000', description: 'Total Assets - Intangible Assets - Total Liabilities' },
+  ];
+
+  // Sample source documents
+  const sourceDocuments: SourceDocument[] = [
+    {
+      id: "doc1",
+      name: "25109 Jefferson Ave_Operating History.pdf",
+      imageUrl: "/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png",
+      extractedData: [
+        { label: 'Annual Revenue', value: 1250000, source: 'Financial Statement.pdf' },
+        { label: 'Operating Expenses', value: 750000, source: 'Financial Statement.pdf' },
+        { label: 'Net Income', value: 500000, source: 'Financial Statement.pdf' }
+      ]
+    },
+    {
+      id: "doc2",
+      name: "25109 Jefferson Ave_Balance Sheet.pdf",
+      imageUrl: "/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png",
+      extractedData: [
+        { label: 'Total Assets', value: 3750000, source: 'Balance Sheet.pdf' },
+        { label: 'Total Liabilities', value: 2250000, source: 'Balance Sheet.pdf' },
+        { label: 'Debt-to-Income Ratio', value: '0.60', source: 'Balance Sheet.pdf' }
+      ]
+    },
+    {
+      id: "doc3",
+      name: "25109 Jefferson Ave_DSCR Analysis.pdf",
+      imageUrl: "/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png",
+      extractedData: [
+        { label: 'DSCR', value: '1.25', source: 'DSCR Analysis.pdf' },
+        { label: 'Annual Debt Service', value: 287000, source: 'DSCR Analysis.pdf' },
+        { label: 'Net Operating Income', value: 359000, source: 'DSCR Analysis.pdf' }
+      ]
+    }
   ];
 
   const statementTypes = [
@@ -43,6 +93,16 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     { id: 'propertyAnalysis', label: 'Property Analysis', icon: <Building size={16} /> },
     { id: 'rentRoll', label: 'Rent Roll', icon: <BarChart3 size={16} /> },
   ];
+
+  // Find the currently selected source document
+  const currentSourceDocument = sourceDocuments.find(doc => doc.id === selectedSourceDoc) || sourceDocuments[0];
+
+  const handleStatementClick = (rowData: any) => {
+    // In a real app, this would navigate to the source document
+    // For now, we'll just select a random source document
+    const randomDocIndex = Math.floor(Math.random() * sourceDocuments.length);
+    setSelectedSourceDoc(sourceDocuments[randomDocIndex].id);
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -62,34 +122,41 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
           />
         </div>
 
-        {/* Statement Type Selector */}
-        <div className="flex flex-wrap items-center space-x-2 mb-2">
-          {statementTypes.map(type => (
-            <button
-              key={type.id}
-              onClick={() => setStatementType(type.id as any)}
-              className={`flex items-center px-3 py-1.5 rounded-md text-sm mb-2 ${
-                statementType === type.id 
-                  ? 'bg-[#a29f95] text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              <span className="mr-1.5">{type.icon}</span>
-              {type.label}
-            </button>
-          ))}
-        </div>
+        {/* Statement Type Selector - only show for detailed view */}
+        {activeView === 'detailed' && (
+          <div className="mb-4">
+            <Select value={statementType} onValueChange={(value) => setStatementType(value as any)}>
+              <SelectTrigger className="w-60">
+                <SelectValue placeholder="Select statement type" />
+              </SelectTrigger>
+              <SelectContent>
+                {statementTypes.map(type => (
+                  <SelectItem key={type.id} value={type.id}>
+                    <div className="flex items-center">
+                      <span className="mr-2">{type.icon}</span>
+                      {type.label}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 overflow-auto">
         {/* Left side - financial spreads */}
-        <div className="w-1/2 pr-4 overflow-auto border-r border-gray-200">
+        <div className="w-2/5 pr-4 overflow-auto border-r border-gray-200">
           {activeView === 'simplified' ? (
             <>
               <h3 className="text-lg font-medium mb-4">Financial Ratios</h3>
               <div className="grid grid-cols-2 gap-4">
                 {financialRatios.map((ratio, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div 
+                    key={index} 
+                    className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 cursor-pointer hover:bg-gray-50"
+                    onClick={() => handleStatementClick(ratio)}
+                  >
                     <div className="text-sm text-gray-500 mb-1">{ratio.name}</div>
                     <div className="text-lg font-medium text-[#a29f95]">{ratio.value}</div>
                     {ratio.description && (
@@ -124,7 +191,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                         <tr>
                           <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Revenue:</td>
                         </tr>
-                        <tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'revenue' })}>
                           <td className="border border-gray-200 px-4 py-2 text-sm">Rental Income</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$712,834</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.10</td>
@@ -133,7 +200,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$802,124</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">$25.99</td>
                         </tr>
-                        <tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
                           <td className="border border-gray-200 px-4 py-2 text-sm">Other</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$0</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">$0.00</td>
@@ -146,7 +213,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                           <td className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Expenses:</td>
                           <td colSpan={6} className="border border-gray-200 bg-gray-50"></td>
                         </tr>
-                        <tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
                           <td className="border border-gray-200 px-4 py-2 text-sm">Operating Expense</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($468,569)</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right">($15.18)</td>
@@ -158,7 +225,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                         <tr>
                           <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Net Operating Income (NOI):</td>
                         </tr>
-                        <tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'noi' })}>
                           <td className="border border-gray-200 px-4 py-2 text-sm font-medium">NOI</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$379,760</td>
                           <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$12.31</td>
@@ -415,16 +482,29 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
         </div>
         
         {/* Right side - source documents */}
-        <div className="w-1/2 pl-4 overflow-auto">
-          <h3 className="text-lg font-medium mb-4">Source Documents</h3>
+        <div className="w-3/5 pl-4 overflow-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Source Documents</h3>
+            <Select value={selectedSourceDoc} onValueChange={setSelectedSourceDoc}>
+              <SelectTrigger className="w-60">
+                <SelectValue placeholder="Select source document" />
+              </SelectTrigger>
+              <SelectContent>
+                {sourceDocuments.map(doc => (
+                  <SelectItem key={doc.id} value={doc.id}>{doc.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
             <div className="flex items-center mb-3">
               <FileText className="h-5 w-5 mr-2 text-[#a29f95]" />
-              <span className="font-medium">25109 Jefferson Ave_Operating History.pdf</span>
+              <span className="font-medium">{currentSourceDocument.name}</span>
             </div>
             <div className="aspect-[1.5/1] bg-gray-50 rounded-md border border-gray-200 overflow-hidden">
               <img 
-                src="/lovable-uploads/101e02fe-1989-4d1a-8542-150a10f02734.png" 
+                src={currentSourceDocument.imageUrl} 
                 alt="Financial Statement" 
                 className="w-full h-full object-cover"
               />
@@ -432,7 +512,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
             <div className="bg-gray-50 p-3 rounded-md text-sm border border-gray-200 mt-3">
               <p className="mb-2 text-gray-600">Extracted data from page 1:</p>
               <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                {spreads.map((item, index) => (
+                {currentSourceDocument.extractedData.map((item, index) => (
                   <li key={index}>
                     {item.label}: {typeof item.value === 'number' ? 
                       `$${item.value.toLocaleString()}` : item.value}
