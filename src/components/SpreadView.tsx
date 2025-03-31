@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
+import { FileText, Table as TableIcon, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Select, 
@@ -10,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { 
-  Table as ShadcnTable,
+  Table,
   TableHeader,
   TableBody,
   TableHead,
@@ -186,7 +187,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     { id: 'noistmt', label: 'NOI Statement', icon: <DollarSign size={16} /> },
     { id: 'pfs', label: 'PFS', icon: <CreditCard size={16} /> },
     { id: 'tradcashflow', label: 'Traditional Cash Flow', icon: <LineChart size={16} /> },
-    { id: 'schedulee', label: 'Schedule E', icon: <Table size={16} /> },
+    { id: 'schedulee', label: 'Schedule E', icon: <TableIcon size={16} /> },
     { id: 'rentsummary', label: 'Rent Summary', icon: <Building size={16} /> },
   ];
 
@@ -202,255 +203,636 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   // Render the NOI Statement table
   const renderNOIStatement = () => (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse">
-        <thead>
-          <tr>
-            <th colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
+      <Table className="min-w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
               NOI Statement
-            </th>
-          </tr>
-          <tr>
-            <th colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
+            </TableHead>
+          </TableRow>
+          <TableRow>
+            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
               966 Piner Road - Real Estate-Warehouse-Industrial/Warehouse
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</td>
-            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</td>
-            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</td>
-            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 3</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">PGI</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">PGI</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Vacancy Percentage</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">0.00%</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Total Vacancy Amount</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$0</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">PGI</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Total Vacancy Amount</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$0</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Effective Gross income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Repairs & Maintenance</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$3,272</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 14 (repairs)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Insurance</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$10,586</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 9 (Insurance)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Property Taxes</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$17,166</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 16 ( Property Taxes)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Utilities</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$5,386</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 17 ( Utilities)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Management Fees</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 11 ( Management fees)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Reserves</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Other expenses</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$9,395</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 19 (Other)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2 font-medium">Total Operating Expenses</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$45,805</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Effective Gross Income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Total Operating expense</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$45,805</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2 font-medium">Net Operating Income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$187,715</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Debt Service</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$117,454</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Personal Financial Statement Charles Evans Schedule of Real Estate Owned June 30, 2024 950 - 966 Piner, Santa Rosa (Annual Debt Service)</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2 font-medium">Excess Cash Flow</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$70,261</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Debt Service</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$117,454</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2 font-medium">DSCR</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right font-medium">1.60</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Cap Rate</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">6.50%</td>
-            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Configurable constant value</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2 font-medium">Estimated Value</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$2,887,923</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Requested Loan Amount</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$1,904,762</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Estimated Value</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right">$2,887,923</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2 font-medium">Loan to Value</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-            <td className="border border-gray-200 px-4 py-2 text-right font-medium">65.96%</td>
-            <td className="border border-gray-200 px-4 py-2"></td>
-          </tr>
-          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-          <tr>
-            <td className="border border-gray-200 px-4 py-2">Estimated Value</td>
-            <td className="border border-
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 3</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">PGI</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">PGI</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Vacancy Percentage</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">0.00%</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Total Vacancy Amount</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$0</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">PGI</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Total Vacancy Amount</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$0</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Effective Gross income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Repairs & Maintenance</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$3,272</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 14 (repairs)</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Insurance</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$10,586</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 9 (Insurance)</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Property Taxes</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$17,166</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 16 ( Property Taxes)</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Utilities</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$5,386</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 17 ( Utilities)</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Management Fees</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 11 ( Management fees)</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Reserves</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Other expenses</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$9,395</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 19 (Other)</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Operating Expenses</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$45,805</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Effective Gross Income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Total Operating expense</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$45,805</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Net Operating Income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$187,715</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  // Render the PFS table
+  const renderPFS = () => (
+    <div className="overflow-x-auto">
+      <Table className="min-w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead colSpan={2} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
+              Personal Financial Statement
+            </TableHead>
+          </TableRow>
+          <TableRow>
+            <TableHead colSpan={2} className="border border-gray-200 px-4 py-2 text-left">
+              CHARLES EVANS - Individual
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">6/30/2024</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Cash - checking accounts</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Liquid Assets</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Notes & Contracts receivable</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Personal Property (autos, jewelry etc.)</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Real Estate (market value)</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Investment Real Estate</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Value Closely Held Business Entity</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Assets</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Real Estate Mortgages</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Investment Real Estate Debt</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Liabilities</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Stated Net Worth (subT)</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  // Render the Traditional Cash Flow table
+  const renderTraditionalCashFlow = () => (
+    <div className="overflow-x-auto">
+      <Table className="min-w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead colSpan={6} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
+              Traditional Cash Flow
+            </TableHead>
+          </TableRow>
+          <TableRow>
+            <TableHead colSpan={6} className="border border-gray-200 px-4 py-2 text-left">
+              CHARLES EVANS - individual
+            </TableHead>
+          </TableRow>
+          <TableRow>
+            <TableHead colSpan={6} className="border border-gray-200 px-4 py-2 text-left">
+              CRE Portfolio: 950 PINER and 966 PINER
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={6} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Source</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={6} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Taxable Interest</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$97</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, 2b</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Social Security Benefits</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$17,814</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, 6a</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Personal Income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$17,911</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={6} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Net Income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$140,644</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 21, B + C</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Mortgage Interest Expense</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$149,516</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 12, B + C</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Other Interest</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$1,775</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 13, B + C</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Depreciation Expense</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$43,043</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 18, B + C</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Cash Flow (Schedule E)</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$334,978</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  );
+  
+  // Render the Schedule E table
+  const renderScheduleE = () => (
+    <div className="overflow-x-auto">
+      <Table className="min-w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
+              Schedule E
+            </TableHead>
+          </TableRow>
+          <TableRow>
+            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
+              CHARLES EVANS - Individual
+            </TableHead>
+          </TableRow>
+          <TableRow>
+            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
+              CRE Portfolio: All others except 950 PINER and 966 PINER
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Source:</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Tax Returns</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Tax Returns</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Tax Returns</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Rents Received</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right">$802,125</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 3 A+B+C</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Income</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$802,125</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  // Render the Rent Summary table
+  const renderRentSummary = () => (
+    <div className="overflow-x-auto">
+      <Table className="min-w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead colSpan={3} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
+              Rent Summary
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">Property</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">Square Footage</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">Annual Rent</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">25109 Jefferson Ave</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">30,854 SF</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">$736,369</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">950 Piner Road</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">15,200 SF</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">$405,120</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-200 px-4 py-2">966 Piner Road</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">11,750 SF</TableCell>
+            <TableCell className="border border-gray-200 px-4 py-2">$233,520</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  // Decide which statement to render based on statementType
+  const renderStatementView = () => {
+    switch (statementType) {
+      case 'noistmt':
+        return renderNOIStatement();
+      case 'pfs':
+        return renderPFS();
+      case 'tradcashflow':
+        return renderTraditionalCashFlow();
+      case 'schedulee':
+        return renderScheduleE();
+      case 'rentsummary':
+        return renderRentSummary();
+      default:
+        return renderNOIStatement();
+    }
+  };
+
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-sm">
+      <div className="flex flex-col space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <h2 className="text-2xl font-bold text-gray-900">Financial Spreads</h2>
+          <div className="flex space-x-2">
+            <ToggleViewButton
+              active={activeView === 'simplified'}
+              onClick={() => setActiveView('simplified')}
+              icon={<BarChart3 size={16} />}
+              label="Simplified"
+            />
+            <ToggleViewButton
+              active={activeView === 'detailed'}
+              onClick={() => setActiveView('detailed')}
+              icon={<FileText size={16} />}
+              label="Statement View"
+            />
+          </div>
+        </div>
+
+        <Tabs defaultValue="ratios" className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="ratios">Key Ratios</TabsTrigger>
+            <TabsTrigger value="statements">Statement Details</TabsTrigger>
+            <TabsTrigger value="source">Source Documents</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="ratios">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {financialRatios.map((ratio, index) => (
+                <div key={index} className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium text-gray-800">{ratio.name}</h3>
+                      {ratio.description && (
+                        <p className="text-sm text-gray-500 mt-1">{ratio.description}</p>
+                      )}
+                    </div>
+                    <span className="text-xl font-bold text-[#20703F]">{ratio.value}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="statements">
+            {activeView === 'simplified' ? (
+              <div className="grid grid-cols-1 gap-4">
+                {sourceDocuments.map((doc) => (
+                  <div key={doc.id} className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <div className="flex justify-between items-center mb-3">
+                      <h3 className="font-medium text-gray-800">{doc.name}</h3>
+                      <span className="text-sm text-gray-500">PDF</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {doc.extractedData.slice(0, 6).map((item, idx) => (
+                        <div key={idx} className="flex justify-between">
+                          <span className="text-gray-600">{item.label}</span>
+                          <span className="font-medium">{typeof item.value === 'number' ? `$${item.value.toLocaleString()}` : item.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {doc.extractedData.length > 6 && (
+                      <button 
+                        onClick={() => handleStatementClick(doc)}
+                        className="mt-3 text-[#20703F] text-sm font-medium flex items-center"
+                      >
+                        View all {doc.extractedData.length} entries
+                        <ChevronDown size={14} className="ml-1" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mb-4">
+                <Select value={statementType} onValueChange={(value: any) => setStatementType(value)}>
+                  <SelectTrigger className="w-full sm:w-[220px] mb-4">
+                    <SelectValue placeholder="Select Statement Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {statementTypes.map((type) => (
+                      <SelectItem key={type.id} value={type.id}>
+                        <div className="flex items-center">
+                          <span className="mr-2">{type.icon}</span>
+                          {type.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <div className="bg-white border border-gray-200 rounded-md shadow-sm">
+                  {renderStatementView()}
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="source">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white border border-gray-200 rounded-md p-4">
+                <h3 className="font-medium text-gray-800 mb-2">{currentSourceDocument.name}</h3>
+                <img 
+                  src={currentSourceDocument.imageUrl} 
+                  alt="Document Preview" 
+                  className="w-full h-auto object-cover rounded border border-gray-200 mb-3"
+                />
+                <p className="text-sm text-gray-500">
+                  PDF document with {currentSourceDocument.extractedData.length} extracted data points.
+                </p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-md p-4">
+                <h3 className="font-medium text-gray-800 mb-2">Extracted Data</h3>
+                <div className="max-h-[400px] overflow-y-auto pr-2">
+                  <div className="space-y-2">
+                    {currentSourceDocument.extractedData.map((item, index) => (
+                      <div key={index} className="flex justify-between py-1 border-b border-gray-100">
+                        <span className="text-gray-700">{item.label}</span>
+                        <span className="font-medium">{typeof item.value === 'number' ? `$${item.value.toLocaleString()}` : item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+};
+
+export default SpreadView;
