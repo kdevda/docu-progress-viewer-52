@@ -9,6 +9,14 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { 
+  Table as ShadcnTable,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell
+} from "@/components/ui/table";
 
 interface SpreadItem {
   label: string;
@@ -193,257 +201,256 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
 
   // Render the NOI Statement table
   const renderNOIStatement = () => (
-    <table className="min-w-full border-collapse">
-      <thead>
-        <tr>
-          <th colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
-            NOI Statement
-          </th>
-        </tr>
-        <tr>
-          <th colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
-            966 Piner Road - Real Estate-Warehouse-Industrial/Warehouse
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</td>
-          <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</td>
-          <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</td>
-          <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 3</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">PGI</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">PGI</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Vacancy Percentage</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">0.00%</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Total Vacancy Amount</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$0</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">PGI</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Total Vacancy Amount</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$0</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Effective Gross income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Repairs & Maintenance</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$3,272</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 14 (repairs)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Insurance</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$10,586</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 9 (Insurance)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Property Taxes</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$17,166</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 16 ( Property Taxes)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Utilities</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$5,386</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 17 ( Utilities)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Management Fees</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 11 ( Management fees)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Reserves</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Other expenses</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$9,395</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 19 (Other)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2 font-medium">Total Operating Expenses</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right font-medium">$45,805</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Effective Gross Income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Total Operating expense</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$45,805</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2 font-medium">Net Operating Income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right font-medium">$187,715</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Debt Service</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$117,454</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Personal Financial Statement Charles Evans Schedule of Real Estate Owned June 30, 2024 950 - 966 Piner, Santa Rosa (Annual Debt Service)</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2 font-medium">Excess Cash Flow</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right font-medium">$70,261</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Debt Service</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$117,454</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2 font-medium">DSCR</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right font-medium">1.60</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Cap Rate</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">6.50%</td>
-          <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Configurable constant value</td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2 font-medium">Estimated Value</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right font-medium">$2,887,923</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Requested Loan Amount</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$1,904,762</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Estimated Value</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right">$2,887,923</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2 font-medium">Loan to Value</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2 text-right font-medium">65.96%</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-        </tr>
-        <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
-        <tr>
-          <td className="border border-gray-200 px-4 py-2">Estimated Value</td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2"></td>
-          <td className="border border-gray-200 px-4 py-2
+    <div className="overflow-x-auto">
+      <table className="min-w-full border-collapse">
+        <thead>
+          <tr>
+            <th colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
+              NOI Statement
+            </th>
+          </tr>
+          <tr>
+            <th colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
+              966 Piner Road - Real Estate-Warehouse-Industrial/Warehouse
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</td>
+            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</td>
+            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</td>
+            <td className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 3</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">PGI</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">PGI</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Vacancy Percentage</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">0.00%</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Total Vacancy Amount</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$0</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">PGI</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Total Vacancy Amount</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$0</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Effective Gross income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Repairs & Maintenance</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$3,272</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 14 (repairs)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Insurance</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$10,586</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 9 (Insurance)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Property Taxes</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$17,166</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 16 ( Property Taxes)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Utilities</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$5,386</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 17 ( Utilities)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Management Fees</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 11 ( Management fees)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Reserves</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Other expenses</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$9,395</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 19 (Other)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2 font-medium">Total Operating Expenses</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$45,805</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Effective Gross Income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$233,520</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Total Operating expense</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$45,805</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2 font-medium">Net Operating Income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$187,715</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Debt Service</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$117,454</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Personal Financial Statement Charles Evans Schedule of Real Estate Owned June 30, 2024 950 - 966 Piner, Santa Rosa (Annual Debt Service)</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2 font-medium">Excess Cash Flow</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$70,261</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Debt Service</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$117,454</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2 font-medium">DSCR</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right font-medium">1.60</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Net Operating Income</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$187,715</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Cap Rate</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">6.50%</td>
+            <td className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Configurable constant value</td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2 font-medium">Estimated Value</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right font-medium">$2,887,923</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Requested Loan Amount</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$1,904,762</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Estimated Value</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right">$2,887,923</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2 font-medium">Loan to Value</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+            <td className="border border-gray-200 px-4 py-2 text-right font-medium">65.96%</td>
+            <td className="border border-gray-200 px-4 py-2"></td>
+          </tr>
+          <tr><td colSpan={5} className="border border-gray-200 h-6"></td></tr>
+          <tr>
+            <td className="border border-gray-200 px-4 py-2">Estimated Value</td>
+            <td className="border border-
