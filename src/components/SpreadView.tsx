@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
-import { FileText, Table as TableIcon, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText, Table as TableIcon, BarChart3, CreditCard, DollarSign, Building, LineChart } from 'lucide-react';
 import { 
   Select, 
   SelectContent, 
@@ -77,21 +76,191 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll' | 'noistmt' | 'pfs' | 'tradcashflow' | 'schedulee'>('noistmt');
   const [selectedSourceDoc, setSelectedSourceDoc] = useState<string>("doc1");
   
-  // Sample ratios data - reduced to 10 entries with DSCR name updated
-  const financialRatios: FinancialRatio[] = [
-    { name: 'Working Capital', value: '$500,000', description: 'Current Assets - Current Liabilities' },
-    { name: 'Current Ratio', value: '2.5x', description: 'Current Assets / Current Liabilities' },
-    { name: 'Quick Ratio', value: '1.8x', description: 'Liquid Assets / Current Liabilities' },
-    { name: 'Debt-to-Equity Ratio', value: '0.7x', description: 'Total Debt / Shareholder Equity' },
-    { name: 'DSCR (P&I, New Debt Only)', value: '2.34x', description: 'Net Operating Income / Debt Service (Principal & Interest)' },
-    { name: 'DSCR (P&I, All Debt)', value: '1.28x', description: 'Net Operating Income / Total Debt Service' },
-    { name: 'Tangible Net Worth', value: '$1,250,000', description: 'Total Assets - Intangible Assets - Total Liabilities' },
-    { name: 'Operating Expense Ratio', value: '52.3%', description: 'Operating Expenses / Effective Gross Income' },
-    { name: 'Interest Coverage Ratio', value: '3.6x', description: 'EBIT / Interest Expense' },
-    { name: 'Debt Yield', value: '11.7%', description: 'Net Operating Income / Loan Amount' },
+  // Sample ratios data for simplified view
+  const ratiosData = [
+    { name: 'Simple Cash Flow Coverage', y2023: '1.78x', y2022: '1.65x', y2021: '1.55x' },
+    { name: 'Excess Cash Flow', y2023: '$73,890', y2022: '$65,325', y2021: '$59,457' },
+    { name: 'Debt to Stated Worth', y2023: '0.38', y2022: '0.42', y2021: '0.47' },
+    { name: 'Debt to Adjusted Net Worth', y2023: '0.45', y2022: '0.53', y2021: '0.59' },
+    { name: 'Debt to Income', y2023: '2.10', y2022: '2.45', y2021: '2.78' },
   ];
 
-  // Sample source documents - more detailed data
+  const globalCashFlowData = [
+    { name: 'Combined Properties NOI', y2023: '$187,715', y2022: '$175,244', y2021: '$162,950' },
+    { name: 'Guarantor Net Personal CF', y2023: '$121,083', y2022: '$115,750', y2021: '$108,500' },
+    { name: 'Global CF Available for Debt Service', y2023: '$308,798', y2022: '$290,994', y2021: '$271,450' },
+    { name: 'Property Debt Service', y2023: '$234,908', y2022: '$234,908', y2021: '$234,908' },
+    { name: 'Global Net Cash Margin', y2023: '$73,890', y2022: '$56,086', y2021: '$36,542' },
+    { name: 'Global DSC Ratio', y2023: '1.31', y2022: '1.24', y2021: '1.16' },
+  ];
+
+  // Sample data for NOI Statement
+  const noiStatementData = [
+    { name: 'Income', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: 'Vacancy Percentage', y2023: '0.00%', y2022: '2.50%', y2021: '5.00%' },
+    { name: 'Total Vacancy Amount', y2023: '$0', y2022: '$5,640', y2021: '$10,875' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: 'Total Vacancy Amount', y2023: '$0', y2022: '$5,640', y2021: '$10,875' },
+    { name: 'Effective Gross income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Repairs & Maintenance', y2023: '$3,272', y2022: '$3,100', y2021: '$2,950' },
+    { name: 'Insurance', y2023: '$10,586', y2022: '$9,875', y2021: '$9,325' },
+    { name: 'Property Taxes', y2023: '$17,166', y2022: '$16,500', y2021: '$15,950' },
+    { name: 'Utilities', y2023: '$5,386', y2022: '$5,200', y2021: '$4,950' },
+    { name: 'Management Fees', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Reserves', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Other expenses', y2023: '$9,395', y2022: '$8,975', y2021: '$8,525' },
+    { name: 'Total Operating Expenses', y2023: '$45,805', y2022: '$43,650', y2021: '$41,700' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Effective Gross Income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: 'Total Operating expense', y2023: '$45,805', y2022: '$43,650', y2021: '$41,700' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Debt Service', y2023: '$117,454', y2022: '$117,454', y2021: '$117,454' },
+    { name: 'Excess Cash Flow', y2023: '$70,261', y2022: '$58,856', y2021: '$47,471' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Debt Service', y2023: '$117,454', y2022: '$117,454', y2021: '$117,454' },
+    { name: 'DSCR', y2023: '1.60', y2022: '1.50', y2021: '1.40' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Cap Rate', y2023: '6.50%', y2022: '6.50%', y2021: '6.50%' },
+    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Requested Loan Amount', y2023: '$1,904,762', y2022: '$1,904,762', y2021: '$1,904,762' },
+    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
+    { name: 'Loan to Value', y2023: '65.96%', y2022: '70.22%', y2021: '75.07%' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
+    { name: 'Policy Loan to Value', y2023: '75.00%', y2022: '75.00%', y2021: '75.00%' },
+    { name: 'Max Loan @ Policy LTV', y2023: '$2,165,942', y2022: '$2,034,346', y2021: '$1,902,981' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'NOI', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Policy DSCR', y2023: '1.20', y2022: '1.20', y2021: '1.20' },
+    { name: 'Max Annual Payment @ Policy DSCR', y2023: '$156,429', y2022: '$146,925', y2021: '$137,437' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Max Loan @ Policy DSCR', y2023: '$1,932,525', y2022: '$1,815,050', y2021: '$1,697,574' },
+    { name: 'Max Loan @ Policy LTV', y2023: '$2,165,942', y2022: '$2,034,346', y2021: '$1,902,981' },
+  ];
+
+  // Sample data for PFS Statement
+  const pfsData = [
+    { name: 'Cash - checking accounts', y2023: '$185,000', y2022: '$165,000', y2021: '$150,000' },
+    { name: 'Liquid Assets', y2023: '$325,000', y2022: '$290,000', y2021: '$275,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Notes & Contracts receivable', y2023: '$75,000', y2022: '$60,000', y2021: '$45,000' },
+    { name: 'Personal Property (autos, jewelry etc.)', y2023: '$180,000', y2022: '$160,000', y2021: '$145,000' },
+    { name: 'Real Estate (market value)', y2023: '$850,000', y2022: '$800,000', y2021: '$750,000' },
+    { name: 'Investment Real Estate', y2023: '$4,250,000', y2022: '$3,975,000', y2021: '$3,750,000' },
+    { name: 'Value Closely Held Business Entity', y2023: '$1,200,000', y2022: '$1,100,000', y2021: '$975,000' },
+    { name: 'Total', y2023: '$6,555,000', y2022: '$6,095,000', y2021: '$5,665,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Total Assets', y2023: '$6,880,000', y2022: '$6,385,000', y2021: '$5,940,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Real Estate Mortgages', y2023: '$595,000', y2022: '$615,000', y2021: '$635,000' },
+    { name: 'Investment Real Estate Debt', y2023: '$2,650,000', y2022: '$2,725,000', y2021: '$2,800,000' },
+    { name: 'Total Liabilities', y2023: '$3,245,000', y2022: '$3,340,000', y2021: '$3,435,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Total Stated Net Worth (subT)', y2023: '$3,635,000', y2022: '$3,045,000', y2021: '$2,505,000' },
+  ];
+
+  // Sample data for Traditional Cash Flow Statement
+  const tradCashFlowData = [
+    { name: 'Taxable Interest', y2023: '$12,500', y2022: '$11,250', y2021: '$10,750' },
+    { name: 'Social Security Benefits', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Personal Income', y2023: '$275,000', y2022: '$255,000', y2021: '$235,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income', y2023: '$95,000', y2022: '$87,500', y2021: '$82,500' },
+    { name: 'Interest (paid to banks. etc.)', y2023: '$12,500', y2022: '$13,250', y2021: '$14,000' },
+    { name: 'Other Interest', y2023: '$5,500', y2022: '$5,250', y2021: '$5,000' },
+    { name: 'Depreciation Expense', y2023: '$28,500', y2022: '$27,250', y2021: '$26,000' },
+    { name: 'Depreciation in COGS', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Amortization', y2023: '$7,500', y2022: '$7,250', y2021: '$7,000' },
+    { name: 'Total Cash Flow (Schedule C)', y2023: '$149,000', y2022: '$140,500', y2021: '$134,500' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income', y2023: '$132,500', y2022: '$125,000', y2021: '$117,500' },
+    { name: 'Mortgage Interest Expense', y2023: '$110,000', y2022: '$112,500', y2021: '$115,000' },
+    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Depreciation Expense', y2023: '$98,500', y2022: '$95,000', y2021: '$92,500' },
+    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Total Cash Flow (Schedule E)', y2023: '$341,000', y2022: '$332,500', y2021: '$325,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Interest (paid to banks. etc.)', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Depreciation Expense', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Total Cash Flow (Schedule F)', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Itemized Deductions', y2023: '$45,000', y2022: '$42,500', y2021: '$40,000' },
+    { name: 'Income Tax Expense', y2023: '$105,000', y2022: '$97,500', y2021: '$90,000' },
+    { name: 'Total Deductions', y2023: '$150,000', y2022: '$140,000', y2021: '$130,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Living Expenses', y2023: '$110,000', y2022: '$105,000', y2021: '$100,000' },
+    { name: 'Total Adjustments to CF', y2023: '$110,000', y2022: '$105,000', y2021: '$100,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Personal Income', y2023: '$275,000', y2022: '$255,000', y2021: '$235,000' },
+    { name: 'Schedule C Income', y2023: '$95,000', y2022: '$87,500', y2021: '$82,500' },
+    { name: 'Schedule C Adjustments', y2023: '$54,000', y2022: '$53,000', y2021: '$52,000' },
+    { name: 'Schedule E Income', y2023: '$132,500', y2022: '$125,000', y2021: '$117,500' },
+    { name: 'Schedule F Income', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Schedule K-1 Income', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: '(Total Deductions)', y2023: '($150,000)', y2022: '($140,000)', y2021: '($130,000)' },
+    { name: '(Total Adjustments)', y2023: '($110,000)', y2022: '($105,000)', y2021: '($100,000)' },
+    { name: 'Gross Cash Flow (subT)', y2023: '$296,500', y2022: '$275,500', y2021: '$257,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Debt Service from Schedule', y2023: '$175,417', y2022: '$175,417', y2021: '$175,417' },
+    { name: 'Total Debt Service', y2023: '$175,417', y2022: '$175,417', y2021: '$175,417' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Total Net Cash Flow', y2023: '$121,083', y2022: '$100,083', y2021: '$81,583' },
+  ];
+
+  // Sample data for Schedule E
+  const scheduleEData = [
+    { name: 'Rents Received', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: 'Total Income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Advertising', y2023: '$1,250', y2022: '$1,150', y2021: '$1,050' },
+    { name: 'Auto and Travel', y2023: '$2,500', y2022: '$2,350', y2021: '$2,200' },
+    { name: 'Cleaning and Maintenance', y2023: '$3,272', y2022: '$3,100', y2021: '$2,950' },
+    { name: 'Commissions', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Insurance', y2023: '$10,586', y2022: '$9,875', y2021: '$9,325' },
+    { name: 'Legal and Other Professional Fees', y2023: '$3,500', y2022: '$3,250', y2021: '$3,000' },
+    { name: 'Management Fees', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Mortgage Interest Paid to Banks, etc.', y2023: '$110,000', y2022: '$112,500', y2021: '$115,000' },
+    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Repairs', y2023: '$8,500', y2022: '$7,950', y2021: '$7,500' },
+    { name: 'Supplies', y2023: '$1,850', y2022: '$1,725', y2021: '$1,625' },
+    { name: 'Taxes', y2023: '$17,166', y2022: '$16,500', y2021: '$15,950' },
+    { name: 'Utilities', y2023: '$5,386', y2022: '$5,200', y2021: '$4,950' },
+    { name: 'Depreciation Expense or Depletion', y2023: '$98,500', y2022: '$95,000', y2021: '$92,500' },
+    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Other Expenses', y2023: '$4,045', y2022: '$3,875', y2021: '$3,675' },
+    { name: 'Total Expenses', y2023: '$266,555', y2022: '$262,475', y2021: '$259,725' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income/(Loss)', y2023: '($33,035)', y2022: '($42,515)', y2021: '($53,100)' },
+    { name: 'Net Income/(Loss)', y2023: '($33,035)', y2022: '($42,515)', y2021: '($53,100)' },
+  ];
+
+  // Sample data for Rent Roll
+  const rentRollData = [
+    { tenant: 'Fairway Cabinets, Inc', unit: '950 Piiner', sqft: 15000, pctSqft: '36.76%', rent: '$17,500', rentSq: '$1.17', leaseStart: '3/1/2020', leaseEnd: '2/28/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '37.67%' },
+    { tenant: 'E Squared Electric', unit: '950 Piiner', sqft: 3000, pctSqft: '7.35%', rent: '$2,700', rentSq: '$0.90', leaseStart: '5/1/2021', leaseEnd: '4/30/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '3.58%' },
+    { tenant: 'Jarrett', unit: '950 Piiner', sqft: 2000, pctSqft: '4.90%', rent: '$2,500', rentSq: '$1.25', leaseStart: '6/15/2022', leaseEnd: '6/14/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '3.44%' },
+    { tenant: 'John Wilson J&J Autobody', unit: '966 Piiner', sqft: 10000, pctSqft: '24.51%', rent: '$12,500', rentSq: '$1.25', leaseStart: '1/1/2021', leaseEnd: '12/31/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '17.81%' },
+    { tenant: 'Nestor Auto Repair', unit: '966 Piiner', sqft: 2500, pctSqft: '6.13%', rent: '$3,000', rentSq: '$1.20', leaseStart: '8/1/2021', leaseEnd: '7/31/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '5.20%' },
+    { tenant: 'Nebel Plumbing', unit: '966 Piiner', sqft: 2500, pctSqft: '6.13%', rent: '$2,500', rentSq: '$1.00', leaseStart: '9/1/2021', leaseEnd: '8/31/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '4.57%' },
+    { tenant: 'Higday', unit: '966 Piiner', sqft: 3300, pctSqft: '8.09%', rent: '$2,750', rentSq: '$0.83', leaseStart: '4/1/2022', leaseEnd: '3/31/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '5.27%' },
+    { tenant: 'Romero Auto Repair', unit: '966 Piiner', sqft: 2500, pctSqft: '6.13%', rent: '$3,000', rentSq: '$1.20', leaseStart: '10/1/2022', leaseEnd: '9/30/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '6.07%' },
+    { tenant: 'Total', unit: '', sqft: 40800, pctSqft: '100%', rent: '$46,450', rentSq: '', leaseStart: '', leaseEnd: '', exitOption: '', leaseDocs: '', pctRent: '' },
+  ];
+
+  // Sample source documents
   const sourceDocuments: SourceDocument[] = [
     {
       id: "doc1",
@@ -191,179 +360,10 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     { id: 'rentRoll', label: 'Rent Roll', icon: <Building size={16} /> },
   ];
 
-  // Sample data for the simplified view
-  const ratiosData = [
-    { name: 'Simple Cash Flow Coverage', y2023: '1.78x', y2022: '1.65x', y2021: '1.55x' },
-    { name: 'Excess Cash Flow', value: '$73,890', y2023: '$73,890', y2022: '$65,325', y2021: '$59,457' },
-    { name: 'Debt to Stated Worth', y2023: '0.38', y2022: '0.42', y2021: '0.47' },
-    { name: 'Debt to Adjusted Net Worth', y2023: '0.45', y2022: '0.53', y2021: '0.59' },
-    { name: 'Debt to Income', y2023: '2.10', y2022: '2.45', y2021: '2.78' },
-  ];
-
-  const globalCashFlowData = [
-    { name: 'Combined Properties NOI', y2023: '$187,715', y2022: '$175,244', y2021: '$162,950' },
-    { name: 'Guarantor Net Personal CF', y2023: '$121,083', y2022: '$115,750', y2021: '$108,500' },
-    { name: 'Global CF Available for Debt Service', y2023: '$308,798', y2022: '$290,994', y2021: '$271,450' },
-    { name: 'Property Debt Service', y2023: '$234,908', y2022: '$234,908', y2021: '$234,908' },
-    { name: 'Global Net Cash Margin', y2023: '$73,890', y2022: '$56,086', y2021: '$36,542' },
-    { name: 'Global DSC Ratio', y2023: '1.31', y2022: '1.24', y2021: '1.16' },
-  ];
-
-  // Sample data for each statement type
-  const noiStatementData = [
-    { name: 'Income', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
-    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
-    { name: 'Vacancy Percentage', y2023: '0.00%', y2022: '2.50%', y2021: '5.00%' },
-    { name: 'Total Vacancy Amount', y2023: '$0', y2022: '$5,640', y2021: '$10,875' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
-    { name: 'Total Vacancy Amount', y2023: '$0', y2022: '$5,640', y2021: '$10,875' },
-    { name: 'Effective Gross income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Repairs & Maintenance', y2023: '$3,272', y2022: '$3,100', y2021: '$2,950' },
-    { name: 'Insurance', y2023: '$10,586', y2022: '$9,875', y2021: '$9,325' },
-    { name: 'Property Taxes', y2023: '$17,166', y2022: '$16,500', y2021: '$15,950' },
-    { name: 'Utilities', y2023: '$5,386', y2022: '$5,200', y2021: '$4,950' },
-    { name: 'Management Fees', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Reserves', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Other expenses', y2023: '$9,395', y2022: '$8,975', y2021: '$8,525' },
-    { name: 'Total Operating Expenses', y2023: '$45,805', y2022: '$43,650', y2021: '$41,700' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Effective Gross Income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
-    { name: 'Total Operating expense', y2023: '$45,805', y2022: '$43,650', y2021: '$41,700' },
-    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
-    { name: 'Debt Service', y2023: '$117,454', y2022: '$117,454', y2021: '$117,454' },
-    { name: 'Excess Cash Flow', y2023: '$70,261', y2022: '$58,856', y2021: '$47,471' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
-    { name: 'Debt Service', y2023: '$117,454', y2022: '$117,454', y2021: '$117,454' },
-    { name: 'DSCR', y2023: '1.60', y2022: '1.50', y2021: '1.40' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
-    { name: 'Cap Rate', y2023: '6.50%', y2022: '6.50%', y2021: '6.50%' },
-    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Requested Loan Amount', y2023: '$1,904,762', y2022: '$1,904,762', y2021: '$1,904,762' },
-    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
-    { name: 'Loan to Value', y2023: '65.96%', y2022: '70.22%', y2021: '75.07%' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
-    { name: 'Policy Loan to Value', y2023: '75.00%', y2022: '75.00%', y2021: '75.00%' },
-    { name: 'Max Loan @ Policy LTV', y2023: '$2,165,942', y2022: '$2,034,346', y2021: '$1,902,981' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'NOI', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
-    { name: 'Policy DSCR', y2023: '1.20', y2022: '1.20', y2021: '1.20' },
-    { name: 'Max Annual Payment @ Policy DSCR', y2023: '$156,429', y2022: '$146,925', y2021: '$137,437' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Max Loan @ Policy DSCR', y2023: '$1,932,525', y2022: '$1,815,050', y2021: '$1,697,574' },
-    { name: 'Max Loan @ Policy LTV', y2023: '$2,165,942', y2022: '$2,034,346', y2021: '$1,902,981' },
-  ];
-
-  const pfsData = [
-    { name: 'Cash - checking accounts', y2023: '$185,000', y2022: '$165,000', y2021: '$150,000' },
-    { name: 'Liquid Assets', y2023: '$325,000', y2022: '$290,000', y2021: '$275,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Notes & Contracts receivable', y2023: '$75,000', y2022: '$60,000', y2021: '$45,000' },
-    { name: 'Personal Property (autos, jewelry etc.)', y2023: '$180,000', y2022: '$160,000', y2021: '$145,000' },
-    { name: 'Real Estate (market value)', y2023: '$850,000', y2022: '$800,000', y2021: '$750,000' },
-    { name: 'Investment Real Estate', y2023: '$4,250,000', y2022: '$3,975,000', y2021: '$3,750,000' },
-    { name: 'Value Closely Held Business Entity', y2023: '$1,200,000', y2022: '$1,100,000', y2021: '$975,000' },
-    { name: 'Total', y2023: '$6,555,000', y2022: '$6,095,000', y2021: '$5,665,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Total Assets', y2023: '$6,880,000', y2022: '$6,385,000', y2021: '$5,940,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Real Estate Mortgages', y2023: '$595,000', y2022: '$615,000', y2021: '$635,000' },
-    { name: 'Investment Real Estate Debt', y2023: '$2,650,000', y2022: '$2,725,000', y2021: '$2,800,000' },
-    { name: 'Total Liabilities', y2023: '$3,245,000', y2022: '$3,340,000', y2021: '$3,435,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Total Stated Net Worth (subT)', y2023: '$3,635,000', y2022: '$3,045,000', y2021: '$2,505,000' },
-  ];
-
-  const tradCashFlowData = [
-    { name: 'Taxable Interest', y2023: '$12,500', y2022: '$11,250', y2021: '$10,750' },
-    { name: 'Social Security Benefits', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Personal Income', y2023: '$275,000', y2022: '$255,000', y2021: '$235,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Income', y2023: '$95,000', y2022: '$87,500', y2021: '$82,500' },
-    { name: 'Interest (paid to banks. etc.)', y2023: '$12,500', y2022: '$13,250', y2021: '$14,000' },
-    { name: 'Other Interest', y2023: '$5,500', y2022: '$5,250', y2021: '$5,000' },
-    { name: 'Depreciation Expense', y2023: '$28,500', y2022: '$27,250', y2021: '$26,000' },
-    { name: 'Depreciation in COGS', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Amortization', y2023: '$7,500', y2022: '$7,250', y2021: '$7,000' },
-    { name: 'Total Cash Flow (Schedule C)', y2023: '$149,000', y2022: '$140,500', y2021: '$134,500' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Income', y2023: '$132,500', y2022: '$125,000', y2021: '$117,500' },
-    { name: 'Mortgage Interest Expense', y2023: '$110,000', y2022: '$112,500', y2021: '$115,000' },
-    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Depreciation Expense', y2023: '$98,500', y2022: '$95,000', y2021: '$92,500' },
-    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Total Cash Flow (Schedule E)', y2023: '$341,000', y2022: '$332,500', y2021: '$325,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Income', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Interest (paid to banks. etc.)', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Depreciation Expense', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Total Cash Flow (Schedule F)', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Itemized Deductions', y2023: '$45,000', y2022: '$42,500', y2021: '$40,000' },
-    { name: 'Income Tax Expense', y2023: '$105,000', y2022: '$97,500', y2021: '$90,000' },
-    { name: 'Total Deductions', y2023: '$150,000', y2022: '$140,000', y2021: '$130,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Living Expenses', y2023: '$110,000', y2022: '$105,000', y2021: '$100,000' },
-    { name: 'Total Adjustments to CF', y2023: '$110,000', y2022: '$105,000', y2021: '$100,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Personal Income', y2023: '$275,000', y2022: '$255,000', y2021: '$235,000' },
-    { name: 'Schedule C Income', y2023: '$95,000', y2022: '$87,500', y2021: '$82,500' },
-    { name: 'Schedule C Adjustments', y2023: '$54,000', y2022: '$53,000', y2021: '$52,000' },
-    { name: 'Schedule E Income', y2023: '$132,500', y2022: '$125,000', y2021: '$117,500' },
-    { name: 'Schedule F Income', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Schedule K-1 Income', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: '(Total Deductions)', y2023: '($150,000)', y2022: '($140,000)', y2021: '($130,000)' },
-    { name: '(Total Adjustments)', y2023: '($110,000)', y2022: '($105,000)', y2021: '($100,000)' },
-    { name: 'Gross Cash Flow (subT)', y2023: '$296,500', y2022: '$275,500', y2021: '$257,000' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Debt Service from Schedule', y2023: '$175,417', y2022: '$175,417', y2021: '$175,417' },
-    { name: 'Total Debt Service', y2023: '$175,417', y2022: '$175,417', y2021: '$175,417' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Total Net Cash Flow', y2023: '$121,083', y2022: '$100,083', y2021: '$81,583' },
-  ];
-
-  const scheduleEData = [
-    { name: 'Rents Received', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
-    { name: 'Total Income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Advertising', y2023: '$1,250', y2022: '$1,150', y2021: '$1,050' },
-    { name: 'Auto and Travel', y2023: '$2,500', y2022: '$2,350', y2021: '$2,200' },
-    { name: 'Cleaning and Maintenance', y2023: '$3,272', y2022: '$3,100', y2021: '$2,950' },
-    { name: 'Commissions', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Insurance', y2023: '$10,586', y2022: '$9,875', y2021: '$9,325' },
-    { name: 'Legal and Other Professional Fees', y2023: '$3,500', y2022: '$3,250', y2021: '$3,000' },
-    { name: 'Management Fees', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Mortgage Interest Paid to Banks, etc.', y2023: '$110,000', y2022: '$112,500', y2021: '$115,000' },
-    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Repairs', y2023: '$8,500', y2022: '$7,950', y2021: '$7,500' },
-    { name: 'Supplies', y2023: '$1,850', y2022: '$1,725', y2021: '$1,625' },
-    { name: 'Taxes', y2023: '$17,166', y2022: '$16,500', y2021: '$15,950' },
-    { name: 'Utilities', y2023: '$5,386', y2022: '$5,200', y2021: '$4,950' },
-    { name: 'Depreciation Expense or Depletion', y2023: '$98,500', y2022: '$95,000', y2021: '$92,500' },
-    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
-    { name: 'Other Expenses', y2023: '$4,045', y2022: '$3,875', y2021: '$3,675' },
-    { name: 'Total Expenses', y2023: '$266,555', y2022: '$262,475', y2021: '$259,725' },
-    { name: '', y2023: '', y2022: '', y2021: '' },
-    { name: 'Net Income/(Loss)', y2023: '($33,035)', y2022: '($42,515)', y2021: '($53,100)' },
-    { name: 'Net Income/(Loss)', y2023: '($33,035)', y2022: '($42,515)', y2021: '($53,100)' },
-  ];
-
   const currentSourceDocument = sourceDocuments.find(doc => doc.id === selectedSourceDoc) || sourceDocuments[0];
 
   const handleStatementClick = (rowData: any) => {
     // In a real app, this would navigate to the source document
-    // For now, we'll just select a random source document
     const randomDocIndex = Math.floor(Math.random() * sourceDocuments.length);
     setSelectedSourceDoc(sourceDocuments[randomDocIndex].id);
   };
@@ -389,7 +389,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="mb-6">
+      <div className="mb-4">
         <div className="flex items-center space-x-4 mb-4">
           <ToggleViewButton 
             active={activeView === 'simplified'} 
@@ -427,11 +427,11 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="w-full pr-4 overflow-auto">
+        <div className="w-full pr-2 overflow-auto">
           {activeView === 'simplified' ? (
             <>
-              <div className="mb-8">
-                <h3 className="text-lg font-medium mb-4">Ratios</h3>
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-2">Ratios</h3>
                 <div className="bg-white rounded-lg shadow border border-gray-100">
                   <Table>
                     <TableHeader>
@@ -470,7 +470,7 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
               </div>
 
               <div>
-                <h3 className="text-lg font-medium mb-4">Global Cash Flow</h3>
+                <h3 className="text-sm font-medium mb-2">Global Cash Flow</h3>
                 <div className="bg-white rounded-lg shadow border border-gray-100">
                   <Table>
                     <TableHeader>
@@ -508,19 +508,68 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                 </div>
               </div>
             </>
+          ) : statementType === 'rentRoll' ? (
+            <>
+              <h3 className="text-sm font-medium mb-2">
+                Rent Roll
+              </h3>
+              <div className="overflow-x-auto">
+                <Table className="text-xs">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="font-semibold">Tenant</TableHead>
+                      <TableHead className="font-semibold">Unit #</TableHead>
+                      <TableHead className="text-right font-semibold">Sq Ft</TableHead>
+                      <TableHead className="text-right font-semibold">% SqFt</TableHead>
+                      <TableHead className="text-right font-semibold">Rent</TableHead>
+                      <TableHead className="text-right font-semibold">Rent/sq</TableHead>
+                      <TableHead className="font-semibold">Lease Start</TableHead>
+                      <TableHead className="font-semibold">Lease End</TableHead>
+                      <TableHead className="font-semibold">Exit Option</TableHead>
+                      <TableHead className="font-semibold">Lease Docs</TableHead>
+                      <TableHead className="text-right font-semibold">% Rent</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {rentRollData.map((item, index) => (
+                      <TableRow 
+                        key={index} 
+                        className={cn(
+                          "hover:bg-gray-50 cursor-pointer",
+                          item.tenant === 'Total' ? "font-semibold bg-gray-50" : ""
+                        )}
+                        onClick={() => handleStatementClick(item)}
+                      >
+                        <TableCell>{item.tenant}</TableCell>
+                        <TableCell>{item.unit}</TableCell>
+                        <TableCell className="text-right">{item.sqft.toLocaleString()}</TableCell>
+                        <TableCell className="text-right">{item.pctSqft}</TableCell>
+                        <TableCell className="text-right">{item.rent}</TableCell>
+                        <TableCell className="text-right">{item.rentSq}</TableCell>
+                        <TableCell>{item.leaseStart}</TableCell>
+                        <TableCell>{item.leaseEnd}</TableCell>
+                        <TableCell>{item.exitOption}</TableCell>
+                        <TableCell>{item.leaseDocs}</TableCell>
+                        <TableCell className="text-right">{item.pctRent}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
           ) : (
             <>
-              <h3 className="text-lg font-medium mb-4">
+              <h3 className="text-sm font-medium mb-2">
                 {statementTypes.find(type => type.id === statementType)?.label || 'Financial Statement'}
               </h3>
               <div className="overflow-x-auto">
-                <Table>
+                <Table className="text-xs">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-2/5">Item</TableHead>
-                      <TableHead className="text-right">2023</TableHead>
-                      <TableHead className="text-right">2022</TableHead>
-                      <TableHead className="text-right">2021</TableHead>
+                      <TableHead className="w-2/5 font-semibold">Item</TableHead>
+                      <TableHead className="text-right font-semibold">2023</TableHead>
+                      <TableHead className="text-right font-semibold">2022</TableHead>
+                      <TableHead className="text-right font-semibold">2021</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -529,20 +578,23 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                         key={index} 
                         className={cn(
                           "hover:bg-gray-50 cursor-pointer",
-                          isEmptyRow(item) ? "h-6 bg-gray-50" : ""
+                          isEmptyRow(item) ? "h-3 bg-gray-50" : "",
+                          item.name.includes('Total') || item.name.includes('subT') ? "font-semibold bg-gray-50" : ""
                         )}
                         onClick={() => handleStatementClick(item)}
                       >
                         {isEmptyRow(item) ? (
-                          <TableCell colSpan={4} className="h-6 bg-gray-50"></TableCell>
+                          <TableCell colSpan={4} className="h-3 bg-gray-50"></TableCell>
                         ) : (
                           <>
-                            <TableCell className={cn("font-medium", item.name.includes('Total') || item.name.includes('subT') ? "font-bold" : "")}>
+                            <TableCell className={cn(
+                              item.name.includes('Total') || item.name.includes('subT') ? "font-semibold" : ""
+                            )}>
                               {item.name}
                             </TableCell>
-                            <TableCell className="text-right text-blue-600 font-medium">{item.y2023}</TableCell>
-                            <TableCell className="text-right text-blue-600 font-medium">{item.y2022}</TableCell>
-                            <TableCell className="text-right text-blue-600 font-medium">{item.y2021}</TableCell>
+                            <TableCell className="text-right text-blue-600">{item.y2023}</TableCell>
+                            <TableCell className="text-right text-blue-600">{item.y2022}</TableCell>
+                            <TableCell className="text-right text-blue-600">{item.y2021}</TableCell>
                           </>
                         )}
                       </TableRow>
