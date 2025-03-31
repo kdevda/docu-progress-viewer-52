@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { FileText, Table as TableIcon, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
+import { FileText, Table, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Select, 
@@ -10,14 +9,6 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { 
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell
-} from "@/components/ui/table";
 
 interface SpreadItem {
   label: string;
@@ -74,7 +65,7 @@ const ToggleViewButton: React.FC<ToggleViewButtonProps> = ({
 
 const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const [activeView, setActiveView] = useState<'simplified' | 'detailed'>('simplified');
-  const [statementType, setStatementType] = useState<'operating' | 'balance' | 'noistmt' | 'pfs' | 'tradcashflow' | 'schedulee' | 'rentsummary'>('operating');
+  const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll'>('operating');
   const [selectedSourceDoc, setSelectedSourceDoc] = useState<string>("doc1");
   
   // Sample ratios data - reduced to 10 entries with DSCR name updated
@@ -184,13 +175,15 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   ];
 
   const statementTypes = [
-    { id: 'noistmt', label: 'NOI Statement', icon: <DollarSign size={16} /> },
-    { id: 'pfs', label: 'PFS', icon: <CreditCard size={16} /> },
-    { id: 'tradcashflow', label: 'Traditional Cash Flow', icon: <LineChart size={16} /> },
-    { id: 'schedulee', label: 'Schedule E', icon: <TableIcon size={16} /> },
-    { id: 'rentsummary', label: 'Rent Summary', icon: <Building size={16} /> },
+    { id: 'operating', label: 'Operating Statement', icon: <DollarSign size={16} /> },
+    { id: 'balance', label: 'Balance Sheet', icon: <CreditCard size={16} /> },
+    { id: 'cashflow', label: 'Cash Flow', icon: <LineChart size={16} /> },
+    { id: 'debtService', label: 'Debt Service', icon: <Table size={16} /> },
+    { id: 'propertyAnalysis', label: 'Property Analysis', icon: <Building size={16} /> },
+    { id: 'rentRoll', label: 'Rent Roll', icon: <BarChart3 size={16} /> },
   ];
 
+  // Find the currently selected source document
   const currentSourceDocument = sourceDocuments.find(doc => doc.id === selectedSourceDoc) || sourceDocuments[0];
 
   const handleStatementClick = (rowData: any) => {
@@ -200,639 +193,358 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     setSelectedSourceDoc(sourceDocuments[randomDocIndex].id);
   };
 
-  // Render the NOI Statement table
-  const renderNOIStatement = () => (
-    <div className="overflow-x-auto">
-      <Table className="min-w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
-              NOI Statement
-            </TableHead>
-          </TableRow>
-          <TableRow>
-            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
-              966 Piner Road - Real Estate-Warehouse-Industrial/Warehouse
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 3</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">PGI</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">PGI</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Vacancy Percentage</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">0.00%</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Total Vacancy Amount</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$0</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">PGI</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Total Vacancy Amount</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$0</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Effective Gross income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Repairs & Maintenance</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$3,272</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 14 (repairs)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Insurance</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$10,586</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 9 (Insurance)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Property Taxes</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$17,166</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 16 ( Property Taxes)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Utilities</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$5,386</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 17 ( Utilities)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Management Fees</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 11 ( Management fees)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Reserves</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Other expenses</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$9,395</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Form 1040 Schedule E row 19 (Other)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Operating Expenses</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$45,805</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Effective Gross Income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$233,520</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Total Operating expense</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$45,805</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Net Operating Income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$187,715</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  );
-
-  // Render the PFS table
-  const renderPFS = () => (
-    <div className="overflow-x-auto">
-      <Table className="min-w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead colSpan={2} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
-              Personal Financial Statement
-            </TableHead>
-          </TableRow>
-          <TableRow>
-            <TableHead colSpan={2} className="border border-gray-200 px-4 py-2 text-left">
-              CHARLES EVANS - Individual
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">6/30/2024</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Cash - checking accounts</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Liquid Assets</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Notes & Contracts receivable</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Personal Property (autos, jewelry etc.)</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Real Estate (market value)</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Investment Real Estate</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Value Closely Held Business Entity</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Assets</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Real Estate Mortgages</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Investment Real Estate Debt</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Liabilities</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Stated Net Worth (subT)</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  );
-
-  // Render the Traditional Cash Flow table
-  const renderTraditionalCashFlow = () => (
-    <div className="overflow-x-auto">
-      <Table className="min-w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead colSpan={6} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
-              Traditional Cash Flow
-            </TableHead>
-          </TableRow>
-          <TableRow>
-            <TableHead colSpan={6} className="border border-gray-200 px-4 py-2 text-left">
-              CHARLES EVANS - individual
-            </TableHead>
-          </TableRow>
-          <TableRow>
-            <TableHead colSpan={6} className="border border-gray-200 px-4 py-2 text-left">
-              CRE Portfolio: 950 PINER and 966 PINER
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell colSpan={6} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2024</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Source</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={6} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Taxable Interest</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$97</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, 2b</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Social Security Benefits</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$17,814</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, 6a</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Personal Income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$17,911</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={6} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Net Income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$140,644</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 21, B + C</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Mortgage Interest Expense</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$149,516</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 12, B + C</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Other Interest</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$1,775</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 13, B + C</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Depreciation Expense</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$43,043</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 18, B + C</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Cash Flow (Schedule E)</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$334,978</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  );
-  
-  // Render the Schedule E table
-  const renderScheduleE = () => (
-    <div className="overflow-x-auto">
-      <Table className="min-w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
-              Schedule E
-            </TableHead>
-          </TableRow>
-          <TableRow>
-            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
-              CHARLES EVANS - Individual
-            </TableHead>
-          </TableRow>
-          <TableRow>
-            <TableHead colSpan={5} className="border border-gray-200 px-4 py-2 text-left">
-              CRE Portfolio: All others except 950 PINER and 966 PINER
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2021</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2022</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">12/31/2023</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Source:</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Tax Returns</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Tax Returns</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-center font-medium">Tax Returns</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={5} className="border border-gray-200 h-6"></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Rents Received</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right">$802,125</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-left text-gray-500 text-sm">Individual tax return Form 1040, Schedule E, Part 1, Row 3 A+B+C</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2 font-medium">Total Income</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2 text-right font-medium">$802,125</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2"></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  );
-
-  // Render the Rent Summary table
-  const renderRentSummary = () => (
-    <div className="overflow-x-auto">
-      <Table className="min-w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead colSpan={3} className="border border-gray-200 px-4 py-2 text-left text-base font-bold">
-              Rent Summary
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">Property</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">Square Footage</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">Annual Rent</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">25109 Jefferson Ave</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">30,854 SF</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">$736,369</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">950 Piner Road</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">15,200 SF</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">$405,120</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="border border-gray-200 px-4 py-2">966 Piner Road</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">11,750 SF</TableCell>
-            <TableCell className="border border-gray-200 px-4 py-2">$233,520</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  );
-
-  // Decide which statement to render based on statementType
-  const renderStatementView = () => {
-    switch (statementType) {
-      case 'noistmt':
-        return renderNOIStatement();
-      case 'pfs':
-        return renderPFS();
-      case 'tradcashflow':
-        return renderTraditionalCashFlow();
-      case 'schedulee':
-        return renderScheduleE();
-      case 'rentsummary':
-        return renderRentSummary();
-      default:
-        return renderNOIStatement();
-    }
-  };
-
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-gray-900">Financial Spreads</h2>
-          <div className="flex space-x-2">
-            <ToggleViewButton
-              active={activeView === 'simplified'}
-              onClick={() => setActiveView('simplified')}
-              icon={<BarChart3 size={16} />}
-              label="Simplified"
-            />
-            <ToggleViewButton
-              active={activeView === 'detailed'}
-              onClick={() => setActiveView('detailed')}
-              icon={<FileText size={16} />}
-              label="Statement View"
-            />
-          </div>
+    <div className="flex flex-col h-full">
+      <div className="mb-6">
+        <div className="flex items-center space-x-4 mb-4">
+          <ToggleViewButton 
+            active={activeView === 'simplified'} 
+            onClick={() => setActiveView('simplified')}
+            icon={<BarChart3 size={16} />}
+            label="Simplified"
+          />
+          <ToggleViewButton 
+            active={activeView === 'detailed'} 
+            onClick={() => setActiveView('detailed')}
+            icon={<Table size={16} />}
+            label="Statement View"
+          />
         </div>
 
-        <Tabs defaultValue="ratios" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="ratios">Key Ratios</TabsTrigger>
-            <TabsTrigger value="statements">Statement Details</TabsTrigger>
-            <TabsTrigger value="source">Source Documents</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="ratios">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {financialRatios.map((ratio, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium text-gray-800">{ratio.name}</h3>
-                      {ratio.description && (
-                        <p className="text-sm text-gray-500 mt-1">{ratio.description}</p>
-                      )}
+        {/* Statement Type Selector - only show for detailed view */}
+        {activeView === 'detailed' && (
+          <div className="mb-4">
+            <Select value={statementType} onValueChange={(value) => setStatementType(value as any)}>
+              <SelectTrigger className="w-60">
+                <SelectValue placeholder="Select statement type" />
+              </SelectTrigger>
+              <SelectContent>
+                {statementTypes.map(type => (
+                  <SelectItem key={type.id} value={type.id}>
+                    <div className="flex items-center">
+                      <span className="mr-2">{type.icon}</span>
+                      {type.label}
                     </div>
-                    <span className="text-xl font-bold text-[#20703F]">{ratio.value}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="statements">
-            {activeView === 'simplified' ? (
-              <div className="grid grid-cols-1 gap-4">
-                {sourceDocuments.map((doc) => (
-                  <div key={doc.id} className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                    <div className="flex justify-between items-center mb-3">
-                      <h3 className="font-medium text-gray-800">{doc.name}</h3>
-                      <span className="text-sm text-gray-500">PDF</span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {doc.extractedData.slice(0, 6).map((item, idx) => (
-                        <div key={idx} className="flex justify-between">
-                          <span className="text-gray-600">{item.label}</span>
-                          <span className="font-medium">{typeof item.value === 'number' ? `$${item.value.toLocaleString()}` : item.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {doc.extractedData.length > 6 && (
-                      <button 
-                        onClick={() => handleStatementClick(doc)}
-                        className="mt-3 text-[#20703F] text-sm font-medium flex items-center"
-                      >
-                        View all {doc.extractedData.length} entries
-                        <ChevronDown size={14} className="ml-1" />
-                      </button>
-                    )}
-                  </div>
+                  </SelectItem>
                 ))}
-              </div>
-            ) : (
-              <div className="mb-4">
-                <Select value={statementType} onValueChange={(value: any) => setStatementType(value)}>
-                  <SelectTrigger className="w-full sm:w-[220px] mb-4">
-                    <SelectValue placeholder="Select Statement Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {statementTypes.map((type) => (
-                      <SelectItem key={type.id} value={type.id}>
-                        <div className="flex items-center">
-                          <span className="mr-2">{type.icon}</span>
-                          {type.label}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+      </div>
 
-                <div className="bg-white border border-gray-200 rounded-md shadow-sm">
-                  {renderStatementView()}
-                </div>
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="source">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white border border-gray-200 rounded-md p-4">
-                <h3 className="font-medium text-gray-800 mb-2">{currentSourceDocument.name}</h3>
-                <img 
-                  src={currentSourceDocument.imageUrl} 
-                  alt="Document Preview" 
-                  className="w-full h-auto object-cover rounded border border-gray-200 mb-3"
-                />
-                <p className="text-sm text-gray-500">
-                  PDF document with {currentSourceDocument.extractedData.length} extracted data points.
-                </p>
-              </div>
-              
-              <div className="bg-white border border-gray-200 rounded-md p-4">
-                <h3 className="font-medium text-gray-800 mb-2">Extracted Data</h3>
-                <div className="max-h-[400px] overflow-y-auto pr-2">
-                  <div className="space-y-2">
-                    {currentSourceDocument.extractedData.map((item, index) => (
-                      <div key={index} className="flex justify-between py-1 border-b border-gray-100">
-                        <span className="text-gray-700">{item.label}</span>
-                        <span className="font-medium">{typeof item.value === 'number' ? `$${item.value.toLocaleString()}` : item.value}</span>
-                      </div>
+      <div className="flex flex-1 overflow-auto">
+        {/* Left side - financial ratios - take full width of column */}
+        <div className="w-full pr-4 overflow-auto">
+          {activeView === 'simplified' ? (
+            <>
+              <h3 className="text-lg font-medium mb-4">Financial Ratios</h3>
+              <div className="bg-white rounded-lg shadow border border-gray-100">
+                <table className="min-w-full">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ratio</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {financialRatios.map((ratio, index) => (
+                      <tr 
+                        key={index} 
+                        className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                        onClick={() => handleStatementClick(ratio)}
+                      >
+                        <td className="px-4 py-3 text-sm font-medium">{ratio.name}</td>
+                        <td className="px-4 py-3 text-sm font-medium text-right text-[#20703F]">{ratio.value}</td>
+                        <td className="px-4 py-3 text-sm text-gray-500">{ratio.description}</td>
+                      </tr>
                     ))}
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+            </>
+          ) : (
+            <>
+              <h3 className="text-lg font-medium mb-4">
+                {statementTypes.find(type => type.id === statementType)?.label || 'Financial Statement'}
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="border border-gray-200 px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Item</th>
+                      <th className="border border-gray-200 px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">2021 TY</th>
+                      <th className="border border-gray-200 px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">$/SF</th>
+                      <th className="border border-gray-200 px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">2022 TY</th>
+                      <th className="border border-gray-200 px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">$/SF</th>
+                      <th className="border border-gray-200 px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">2023 Q3</th>
+                      <th className="border border-gray-200 px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">$/SF</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {statementType === 'operating' && (
+                      <>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Revenue:</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'revenue' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Rental Income</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$712,834</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.10</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$727,583</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$23.58</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$802,124</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$25.99</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">CAM & Reimbursements</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$120,450</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$3.90</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$124,063</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.02</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$128,965</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.18</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Parking Income</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$52,150</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.69</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$54,925</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.78</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$57,671</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.87</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Other Income</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$35,785</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.16</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$38,450</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.25</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$42,570</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.38</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50 font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Revenue</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$921,219</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$29.85</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$945,021</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$30.63</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,031,330</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$33.42</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Expenses:</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Property Taxes</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($98,750)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.20)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($102,700)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.33)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($107,808)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.49)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Insurance</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($57,234)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($1.85)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($62,384)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.02)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($65,503)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.12)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Utilities</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($112,585)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.65)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($126,834)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($4.11)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($93,946)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.04)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Maintenance</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($95,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.08)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($120,750)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.91)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($80,500)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.61)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Management</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($65,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.11)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($67,600)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.19)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($70,304)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($2.28)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Other Expenses</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($40,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($1.30)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($99,450)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($3.22)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($30,196)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($0.98)</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50 font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Expenses</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($468,569)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($15.18)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($579,718)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($18.79)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($448,257)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($14.53)</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Net Operating Income (NOI):</td>
+                        </tr>
+                        <tr className="cursor-pointer hover:bg-gray-50 font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm font-medium">NOI</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$452,650</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$14.67</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$365,303</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$11.84</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$583,073</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right font-medium">$18.90</td>
+                        </tr>
+                      </>
+                    )}
+                    
+                    {statementType === 'balance' && (
+                      <>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Assets:</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Cash & Equivalents</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$254,321</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$8.24</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$312,456</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$10.12</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$345,789</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$11.20</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Accounts Receivable</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$78,542</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$2.54</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$65,321</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$2.12</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$54,897</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$1.78</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Land</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,250,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$40.51</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,250,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$40.51</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,250,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$40.51</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Building & Improvements</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,875,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$60.77</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,975,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$64.01</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$2,125,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$68.87</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Other Assets</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$125,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.05</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$137,500</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.46</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$143,750</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$4.66</td>
+                        </tr>
+                        <tr className="font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Assets</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,582,863</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$116.12</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,740,277</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$121.23</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$3,919,436</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$127.03</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Liabilities:</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Current Liabilities</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($225,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($7.29)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($235,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($7.62)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($240,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($7.78)</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Long-term Debt</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,025,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($65.63)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($1,975,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($64.01)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($1,925,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($62.39)</td>
+                        </tr>
+                        <tr className="font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Liabilities</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,250,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($72.92)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,210,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($71.63)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-red-600">($2,165,000)</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">($70.17)</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={7} className="border border-gray-200 px-4 py-2 text-sm font-medium bg-gray-50">Equity:</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Owner's Equity</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$625,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$20.26</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$625,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$20.26</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$625,000</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$20.26</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Retained Earnings</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$707,863</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$22.94</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$905,277</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$29.34</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,129,436</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$36.61</td>
+                        </tr>
+                        <tr className="font-medium">
+                          <td className="border border-gray-200 px-4 py-2 text-sm">Total Equity</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,332,863</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$43.20</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,530,277</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$49.60</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right text-blue-600">$1,754,436</td>
+                          <td className="border border-gray-200 px-4 py-2 text-sm text-right">$56.86</td>
+                        </tr>
+                      </>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default SpreadView;
+
