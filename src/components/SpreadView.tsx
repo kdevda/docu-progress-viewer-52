@@ -17,6 +17,8 @@ import {
   TableRow,
   TableCell
 } from "@/components/ui/table";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface SpreadItem {
   label: string;
@@ -249,14 +251,14 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
 
   // Sample data for Rent Roll
   const rentRollData = [
-    { tenant: 'Fairway Cabinets, Inc', unit: '950 Piiner', sqft: 15000, pctSqft: '36.76%', rent: '$17,500', rentSq: '$1.17', leaseStart: '3/1/2020', leaseEnd: '2/28/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '37.67%' },
-    { tenant: 'E Squared Electric', unit: '950 Piiner', sqft: 3000, pctSqft: '7.35%', rent: '$2,700', rentSq: '$0.90', leaseStart: '5/1/2021', leaseEnd: '4/30/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '3.58%' },
-    { tenant: 'Jarrett', unit: '950 Piiner', sqft: 2000, pctSqft: '4.90%', rent: '$2,500', rentSq: '$1.25', leaseStart: '6/15/2022', leaseEnd: '6/14/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '3.44%' },
-    { tenant: 'John Wilson J&J Autobody', unit: '966 Piiner', sqft: 10000, pctSqft: '24.51%', rent: '$12,500', rentSq: '$1.25', leaseStart: '1/1/2021', leaseEnd: '12/31/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '17.81%' },
-    { tenant: 'Nestor Auto Repair', unit: '966 Piiner', sqft: 2500, pctSqft: '6.13%', rent: '$3,000', rentSq: '$1.20', leaseStart: '8/1/2021', leaseEnd: '7/31/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '5.20%' },
-    { tenant: 'Nebel Plumbing', unit: '966 Piiner', sqft: 2500, pctSqft: '6.13%', rent: '$2,500', rentSq: '$1.00', leaseStart: '9/1/2021', leaseEnd: '8/31/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '4.57%' },
-    { tenant: 'Higday', unit: '966 Piiner', sqft: 3300, pctSqft: '8.09%', rent: '$2,750', rentSq: '$0.83', leaseStart: '4/1/2022', leaseEnd: '3/31/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '5.27%' },
-    { tenant: 'Romero Auto Repair', unit: '966 Piiner', sqft: 2500, pctSqft: '6.13%', rent: '$3,000', rentSq: '$1.20', leaseStart: '10/1/2022', leaseEnd: '9/30/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '6.07%' },
+    { tenant: 'Fairway Cabinets, Inc', unit: '950 Piner', sqft: 15000, pctSqft: '36.76%', rent: '$17,500', rentSq: '$1.17', leaseStart: '3/1/2020', leaseEnd: '2/28/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '37.67%' },
+    { tenant: 'E Squared Electric', unit: '950 Piner', sqft: 3000, pctSqft: '7.35%', rent: '$2,700', rentSq: '$0.90', leaseStart: '5/1/2021', leaseEnd: '4/30/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '3.58%' },
+    { tenant: 'Jarrett', unit: '950 Piner', sqft: 2000, pctSqft: '4.90%', rent: '$2,500', rentSq: '$1.25', leaseStart: '6/15/2022', leaseEnd: '6/14/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '3.44%' },
+    { tenant: 'John Wilson J&J Autobody', unit: '966 Piner', sqft: 10000, pctSqft: '24.51%', rent: '$12,500', rentSq: '$1.25', leaseStart: '1/1/2021', leaseEnd: '12/31/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '17.81%' },
+    { tenant: 'Nestor Auto Repair', unit: '966 Piner', sqft: 2500, pctSqft: '6.13%', rent: '$3,000', rentSq: '$1.20', leaseStart: '8/1/2021', leaseEnd: '7/31/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '5.20%' },
+    { tenant: 'Nebel Plumbing', unit: '966 Piner', sqft: 2500, pctSqft: '6.13%', rent: '$2,500', rentSq: '$1.00', leaseStart: '9/1/2021', leaseEnd: '8/31/2024', exitOption: 'None', leaseDocs: 'On File', pctRent: '4.57%' },
+    { tenant: 'Higday', unit: '966 Piner', sqft: 3300, pctSqft: '8.09%', rent: '$2,750', rentSq: '$0.83', leaseStart: '4/1/2022', leaseEnd: '3/31/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '5.27%' },
+    { tenant: 'Romero Auto Repair', unit: '966 Piner', sqft: 2500, pctSqft: '6.13%', rent: '$3,000', rentSq: '$1.20', leaseStart: '10/1/2022', leaseEnd: '9/30/2025', exitOption: 'None', leaseDocs: 'On File', pctRent: '6.07%' },
     { tenant: 'Total', unit: '', sqft: 40800, pctSqft: '100%', rent: '$46,450', rentSq: '', leaseStart: '', leaseEnd: '', exitOption: '', leaseDocs: '', pctRent: '' },
   ];
 
@@ -387,6 +389,57 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   // Function to render empty space for separator rows
   const isEmptyRow = (item: any) => item.name === '' && item.y2023 === '' && item.y2022 === '' && item.y2021 === '';
 
+  const renderSourceDocument = () => {
+    return (
+      <Card className="h-full">
+        <CardHeader className="py-3 px-4 border-b">
+          <CardTitle className="text-sm font-semibold">Source Document</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-xs font-semibold mb-1">Document Name</h3>
+              <p className="text-sm">{currentSourceDocument.name}</p>
+            </div>
+            
+            <div>
+              <h3 className="text-xs font-semibold mb-1">Document Preview</h3>
+              <div className="border rounded-md overflow-hidden">
+                <img 
+                  src={currentSourceDocument.imageUrl} 
+                  alt="Document Preview" 
+                  className="w-full h-40 object-cover object-top"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-xs font-semibold mb-1">Extracted Data</h3>
+              <div className="border rounded-md p-3 bg-gray-50 max-h-[300px] overflow-y-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left pb-1.5 font-medium">Label</th>
+                      <th className="text-right pb-1.5 font-medium">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentSourceDocument.extractedData.map((item, index) => (
+                      <tr key={index} className="border-b border-gray-100 last:border-0">
+                        <td className="py-1.5">{item.label}</td>
+                        <td className="py-1.5 text-right">{typeof item.value === 'number' ? `$${item.value.toLocaleString()}` : item.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="mb-4">
@@ -427,184 +480,189 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="w-full pr-2 overflow-auto">
-          {activeView === 'simplified' ? (
-            <>
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2">Ratios</h3>
-                <div className="bg-white rounded-lg shadow border border-gray-100">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-1/4">Ratio</TableHead>
-                        <TableHead className="text-right">
-                          <div>2023</div>
-                          <div className="text-xs text-gray-500">Tax Return</div>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <div>2022</div>
-                          <div className="text-xs text-gray-500">Tax Return</div>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <div>2021</div>
-                          <div className="text-xs text-gray-500">Tax Return</div>
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {ratiosData.map((ratio, index) => (
-                        <TableRow 
-                          key={index} 
-                          className="hover:bg-gray-50 cursor-pointer"
-                          onClick={() => handleStatementClick(ratio)}
-                        >
-                          <TableCell className="font-medium">{ratio.name}</TableCell>
-                          <TableCell className="text-right text-[#20703F] font-medium">{ratio.y2023}</TableCell>
-                          <TableCell className="text-right text-[#20703F] font-medium">{ratio.y2022}</TableCell>
-                          <TableCell className="text-right text-[#20703F] font-medium">{ratio.y2021}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-medium mb-2">Global Cash Flow</h3>
-                <div className="bg-white rounded-lg shadow border border-gray-100">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-1/4">Item</TableHead>
-                        <TableHead className="text-right">
-                          <div>2023</div>
-                          <div className="text-xs text-gray-500">Tax Return</div>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <div>2022</div>
-                          <div className="text-xs text-gray-500">Tax Return</div>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <div>2021</div>
-                          <div className="text-xs text-gray-500">Tax Return</div>
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {globalCashFlowData.map((item, index) => (
-                        <TableRow 
-                          key={index} 
-                          className="hover:bg-gray-50 cursor-pointer"
-                          onClick={() => handleStatementClick(item)}
-                        >
-                          <TableCell className="font-medium">{item.name}</TableCell>
-                          <TableCell className="text-right text-[#20703F] font-medium">{item.y2023}</TableCell>
-                          <TableCell className="text-right text-[#20703F] font-medium">{item.y2022}</TableCell>
-                          <TableCell className="text-right text-[#20703F] font-medium">{item.y2021}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </div>
-            </>
-          ) : statementType === 'rentRoll' ? (
-            <>
-              <h3 className="text-sm font-medium mb-2">
-                Rent Roll
-              </h3>
-              <div className="overflow-x-auto">
-                <Table className="text-xs">
+        {activeView === 'simplified' ? (
+          <div className="w-full pr-2 overflow-auto space-y-6">
+            <div>
+              <h3 className="text-sm font-medium mb-2">Ratios</h3>
+              <div className="bg-white rounded-lg shadow border border-gray-100">
+                <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="font-semibold">Tenant</TableHead>
-                      <TableHead className="font-semibold">Unit #</TableHead>
-                      <TableHead className="text-right font-semibold">Sq Ft</TableHead>
-                      <TableHead className="text-right font-semibold">% SqFt</TableHead>
-                      <TableHead className="text-right font-semibold">Rent</TableHead>
-                      <TableHead className="text-right font-semibold">Rent/sq</TableHead>
-                      <TableHead className="font-semibold">Lease Start</TableHead>
-                      <TableHead className="font-semibold">Lease End</TableHead>
-                      <TableHead className="font-semibold">Exit Option</TableHead>
-                      <TableHead className="font-semibold">Lease Docs</TableHead>
-                      <TableHead className="text-right font-semibold">% Rent</TableHead>
+                      <TableHead className="w-1/4">Ratio</TableHead>
+                      <TableHead className="text-right">
+                        <div>2023</div>
+                        <div className="text-xs text-gray-500">Tax Return</div>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <div>2022</div>
+                        <div className="text-xs text-gray-500">Tax Return</div>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <div>2021</div>
+                        <div className="text-xs text-gray-500">Tax Return</div>
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {rentRollData.map((item, index) => (
+                    {ratiosData.map((ratio, index) => (
                       <TableRow 
                         key={index} 
-                        className={cn(
-                          "hover:bg-gray-50 cursor-pointer",
-                          item.tenant === 'Total' ? "font-semibold bg-gray-50" : ""
-                        )}
-                        onClick={() => handleStatementClick(item)}
+                        className="hover:bg-gray-50 cursor-pointer"
+                        onClick={() => handleStatementClick(ratio)}
                       >
-                        <TableCell>{item.tenant}</TableCell>
-                        <TableCell>{item.unit}</TableCell>
-                        <TableCell className="text-right">{item.sqft.toLocaleString()}</TableCell>
-                        <TableCell className="text-right">{item.pctSqft}</TableCell>
-                        <TableCell className="text-right">{item.rent}</TableCell>
-                        <TableCell className="text-right">{item.rentSq}</TableCell>
-                        <TableCell>{item.leaseStart}</TableCell>
-                        <TableCell>{item.leaseEnd}</TableCell>
-                        <TableCell>{item.exitOption}</TableCell>
-                        <TableCell>{item.leaseDocs}</TableCell>
-                        <TableCell className="text-right">{item.pctRent}</TableCell>
+                        <TableCell className="font-medium">{ratio.name}</TableCell>
+                        <TableCell className="text-right text-[#20703F] font-medium">{ratio.y2023}</TableCell>
+                        <TableCell className="text-right text-[#20703F] font-medium">{ratio.y2022}</TableCell>
+                        <TableCell className="text-right text-[#20703F] font-medium">{ratio.y2021}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
-            </>
-          ) : (
-            <>
-              <h3 className="text-sm font-medium mb-2">
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium mb-2">Global Cash Flow</h3>
+              <div className="bg-white rounded-lg shadow border border-gray-100">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-1/4">Item</TableHead>
+                      <TableHead className="text-right">
+                        <div>2023</div>
+                        <div className="text-xs text-gray-500">Tax Return</div>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <div>2022</div>
+                        <div className="text-xs text-gray-500">Tax Return</div>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <div>2021</div>
+                        <div className="text-xs text-gray-500">Tax Return</div>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {globalCashFlowData.map((item, index) => (
+                      <TableRow 
+                        key={index} 
+                        className="hover:bg-gray-50 cursor-pointer"
+                        onClick={() => handleStatementClick(item)}
+                      >
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell className="text-right text-[#20703F] font-medium">{item.y2023}</TableCell>
+                        <TableCell className="text-right text-[#20703F] font-medium">{item.y2022}</TableCell>
+                        <TableCell className="text-right text-[#20703F] font-medium">{item.y2021}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <ResizablePanelGroup direction="horizontal" className="w-full h-full rounded-lg border">
+            <ResizablePanel defaultSize={66} minSize={40} className="p-3 overflow-auto">
+              <h3 className="text-sm font-medium mb-3">
                 {statementTypes.find(type => type.id === statementType)?.label || 'Financial Statement'}
               </h3>
-              <div className="overflow-x-auto">
-                <Table className="text-xs">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-2/5 font-semibold">Item</TableHead>
-                      <TableHead className="text-right font-semibold">2023</TableHead>
-                      <TableHead className="text-right font-semibold">2022</TableHead>
-                      <TableHead className="text-right font-semibold">2021</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {getStatementData().map((item, index) => (
-                      <TableRow 
-                        key={index} 
-                        className={cn(
-                          "hover:bg-gray-50 cursor-pointer",
-                          isEmptyRow(item) ? "h-3 bg-gray-50" : "",
-                          item.name.includes('Total') || item.name.includes('subT') ? "font-semibold bg-gray-50" : ""
-                        )}
-                        onClick={() => handleStatementClick(item)}
-                      >
-                        {isEmptyRow(item) ? (
-                          <TableCell colSpan={4} className="h-3 bg-gray-50"></TableCell>
-                        ) : (
-                          <>
-                            <TableCell className={cn(
-                              item.name.includes('Total') || item.name.includes('subT') ? "font-semibold" : ""
-                            )}>
-                              {item.name}
-                            </TableCell>
-                            <TableCell className="text-right text-blue-600">{item.y2023}</TableCell>
-                            <TableCell className="text-right text-blue-600">{item.y2022}</TableCell>
-                            <TableCell className="text-right text-blue-600">{item.y2021}</TableCell>
-                          </>
-                        )}
+              
+              {statementType === 'rentRoll' ? (
+                <div className="overflow-x-auto">
+                  <Table className="text-xs">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-semibold">Tenant</TableHead>
+                        <TableHead className="font-semibold">Unit #</TableHead>
+                        <TableHead className="text-right font-semibold">Sq Ft</TableHead>
+                        <TableHead className="text-right font-semibold">% SqFt</TableHead>
+                        <TableHead className="text-right font-semibold">Rent</TableHead>
+                        <TableHead className="text-right font-semibold">Rent/sq</TableHead>
+                        <TableHead className="font-semibold">Lease Start</TableHead>
+                        <TableHead className="font-semibold">Lease End</TableHead>
+                        <TableHead className="font-semibold">Exit Option</TableHead>
+                        <TableHead className="font-semibold">Lease Docs</TableHead>
+                        <TableHead className="text-right font-semibold">% Rent</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </>
-          )}
-        </div>
+                    </TableHeader>
+                    <TableBody>
+                      {rentRollData.map((item, index) => (
+                        <TableRow 
+                          key={index} 
+                          className={cn(
+                            "hover:bg-gray-50 cursor-pointer",
+                            item.tenant === 'Total' ? "font-semibold bg-gray-50" : ""
+                          )}
+                          onClick={() => handleStatementClick(item)}
+                        >
+                          <TableCell className="py-1.5">{item.tenant}</TableCell>
+                          <TableCell className="py-1.5">{item.unit}</TableCell>
+                          <TableCell className="py-1.5 text-right">{item.sqft.toLocaleString()}</TableCell>
+                          <TableCell className="py-1.5 text-right">{item.pctSqft}</TableCell>
+                          <TableCell className="py-1.5 text-right">{item.rent}</TableCell>
+                          <TableCell className="py-1.5 text-right">{item.rentSq}</TableCell>
+                          <TableCell className="py-1.5">{item.leaseStart}</TableCell>
+                          <TableCell className="py-1.5">{item.leaseEnd}</TableCell>
+                          <TableCell className="py-1.5">{item.exitOption}</TableCell>
+                          <TableCell className="py-1.5">{item.leaseDocs}</TableCell>
+                          <TableCell className="py-1.5 text-right">{item.pctRent}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table className="text-xs">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-2/5 font-semibold py-1.5">Item</TableHead>
+                        <TableHead className="text-right font-semibold py-1.5">2023</TableHead>
+                        <TableHead className="text-right font-semibold py-1.5">2022</TableHead>
+                        <TableHead className="text-right font-semibold py-1.5">2021</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {getStatementData().map((item, index) => (
+                        <TableRow 
+                          key={index} 
+                          className={cn(
+                            "hover:bg-gray-50 cursor-pointer",
+                            isEmptyRow(item) ? "h-2 bg-gray-50" : "",
+                            item.name.includes('Total') || item.name.includes('subT') ? "font-semibold bg-gray-50" : ""
+                          )}
+                          onClick={() => handleStatementClick(item)}
+                        >
+                          {isEmptyRow(item) ? (
+                            <TableCell colSpan={4} className="h-2 bg-gray-50"></TableCell>
+                          ) : (
+                            <>
+                              <TableCell className={cn(
+                                "py-1.5",
+                                item.name.includes('Total') || item.name.includes('subT') ? "font-semibold" : ""
+                              )}>
+                                {item.name}
+                              </TableCell>
+                              <TableCell className="text-right text-blue-600 py-1.5">{item.y2023}</TableCell>
+                              <TableCell className="text-right text-blue-600 py-1.5">{item.y2022}</TableCell>
+                              <TableCell className="text-right text-blue-600 py-1.5">{item.y2021}</TableCell>
+                            </>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </ResizablePanel>
+            
+            <ResizableHandle withHandle />
+            
+            <ResizablePanel defaultSize={34} minSize={25} className="bg-gray-50">
+              {renderSourceDocument()}
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        )}
       </div>
     </div>
   );
