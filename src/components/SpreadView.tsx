@@ -74,7 +74,7 @@ const ToggleViewButton: React.FC<ToggleViewButtonProps> = ({
 
 const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
   const [activeView, setActiveView] = useState<'simplified' | 'detailed'>('simplified');
-  const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll' | 'noistmt' | 'pfs' | 'tradcashflow' | 'schedulee'>('operating');
+  const [statementType, setStatementType] = useState<'operating' | 'balance' | 'cashflow' | 'debtService' | 'propertyAnalysis' | 'rentRoll' | 'noistmt' | 'pfs' | 'tradcashflow' | 'schedulee'>('noistmt');
   const [selectedSourceDoc, setSelectedSourceDoc] = useState<string>("doc1");
   
   // Sample ratios data - reduced to 10 entries with DSCR name updated
@@ -209,6 +209,156 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     { name: 'Global DSC Ratio', y2023: '1.31', y2022: '1.24', y2021: '1.16' },
   ];
 
+  // Sample data for each statement type
+  const noiStatementData = [
+    { name: 'Income', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: 'Vacancy Percentage', y2023: '0.00%', y2022: '2.50%', y2021: '5.00%' },
+    { name: 'Total Vacancy Amount', y2023: '$0', y2022: '$5,640', y2021: '$10,875' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'PGI', y2023: '$233,520', y2022: '$225,600', y2021: '$217,500' },
+    { name: 'Total Vacancy Amount', y2023: '$0', y2022: '$5,640', y2021: '$10,875' },
+    { name: 'Effective Gross income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Repairs & Maintenance', y2023: '$3,272', y2022: '$3,100', y2021: '$2,950' },
+    { name: 'Insurance', y2023: '$10,586', y2022: '$9,875', y2021: '$9,325' },
+    { name: 'Property Taxes', y2023: '$17,166', y2022: '$16,500', y2021: '$15,950' },
+    { name: 'Utilities', y2023: '$5,386', y2022: '$5,200', y2021: '$4,950' },
+    { name: 'Management Fees', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Reserves', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Other expenses', y2023: '$9,395', y2022: '$8,975', y2021: '$8,525' },
+    { name: 'Total Operating Expenses', y2023: '$45,805', y2022: '$43,650', y2021: '$41,700' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Effective Gross Income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: 'Total Operating expense', y2023: '$45,805', y2022: '$43,650', y2021: '$41,700' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Debt Service', y2023: '$117,454', y2022: '$117,454', y2021: '$117,454' },
+    { name: 'Excess Cash Flow', y2023: '$70,261', y2022: '$58,856', y2021: '$47,471' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Debt Service', y2023: '$117,454', y2022: '$117,454', y2021: '$117,454' },
+    { name: 'DSCR', y2023: '1.60', y2022: '1.50', y2021: '1.40' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Operating Income', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Cap Rate', y2023: '6.50%', y2022: '6.50%', y2021: '6.50%' },
+    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Requested Loan Amount', y2023: '$1,904,762', y2022: '$1,904,762', y2021: '$1,904,762' },
+    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
+    { name: 'Loan to Value', y2023: '65.96%', y2022: '70.22%', y2021: '75.07%' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Estimated Value', y2023: '$2,887,923', y2022: '$2,712,462', y2021: '$2,537,308' },
+    { name: 'Policy Loan to Value', y2023: '75.00%', y2022: '75.00%', y2021: '75.00%' },
+    { name: 'Max Loan @ Policy LTV', y2023: '$2,165,942', y2022: '$2,034,346', y2021: '$1,902,981' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'NOI', y2023: '$187,715', y2022: '$176,310', y2021: '$164,925' },
+    { name: 'Policy DSCR', y2023: '1.20', y2022: '1.20', y2021: '1.20' },
+    { name: 'Max Annual Payment @ Policy DSCR', y2023: '$156,429', y2022: '$146,925', y2021: '$137,437' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Max Loan @ Policy DSCR', y2023: '$1,932,525', y2022: '$1,815,050', y2021: '$1,697,574' },
+    { name: 'Max Loan @ Policy LTV', y2023: '$2,165,942', y2022: '$2,034,346', y2021: '$1,902,981' },
+  ];
+
+  const pfsData = [
+    { name: 'Cash - checking accounts', y2023: '$185,000', y2022: '$165,000', y2021: '$150,000' },
+    { name: 'Liquid Assets', y2023: '$325,000', y2022: '$290,000', y2021: '$275,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Notes & Contracts receivable', y2023: '$75,000', y2022: '$60,000', y2021: '$45,000' },
+    { name: 'Personal Property (autos, jewelry etc.)', y2023: '$180,000', y2022: '$160,000', y2021: '$145,000' },
+    { name: 'Real Estate (market value)', y2023: '$850,000', y2022: '$800,000', y2021: '$750,000' },
+    { name: 'Investment Real Estate', y2023: '$4,250,000', y2022: '$3,975,000', y2021: '$3,750,000' },
+    { name: 'Value Closely Held Business Entity', y2023: '$1,200,000', y2022: '$1,100,000', y2021: '$975,000' },
+    { name: 'Total', y2023: '$6,555,000', y2022: '$6,095,000', y2021: '$5,665,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Total Assets', y2023: '$6,880,000', y2022: '$6,385,000', y2021: '$5,940,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Real Estate Mortgages', y2023: '$595,000', y2022: '$615,000', y2021: '$635,000' },
+    { name: 'Investment Real Estate Debt', y2023: '$2,650,000', y2022: '$2,725,000', y2021: '$2,800,000' },
+    { name: 'Total Liabilities', y2023: '$3,245,000', y2022: '$3,340,000', y2021: '$3,435,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Total Stated Net Worth (subT)', y2023: '$3,635,000', y2022: '$3,045,000', y2021: '$2,505,000' },
+  ];
+
+  const tradCashFlowData = [
+    { name: 'Taxable Interest', y2023: '$12,500', y2022: '$11,250', y2021: '$10,750' },
+    { name: 'Social Security Benefits', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Personal Income', y2023: '$275,000', y2022: '$255,000', y2021: '$235,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income', y2023: '$95,000', y2022: '$87,500', y2021: '$82,500' },
+    { name: 'Interest (paid to banks. etc.)', y2023: '$12,500', y2022: '$13,250', y2021: '$14,000' },
+    { name: 'Other Interest', y2023: '$5,500', y2022: '$5,250', y2021: '$5,000' },
+    { name: 'Depreciation Expense', y2023: '$28,500', y2022: '$27,250', y2021: '$26,000' },
+    { name: 'Depreciation in COGS', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Amortization', y2023: '$7,500', y2022: '$7,250', y2021: '$7,000' },
+    { name: 'Total Cash Flow (Schedule C)', y2023: '$149,000', y2022: '$140,500', y2021: '$134,500' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income', y2023: '$132,500', y2022: '$125,000', y2021: '$117,500' },
+    { name: 'Mortgage Interest Expense', y2023: '$110,000', y2022: '$112,500', y2021: '$115,000' },
+    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Depreciation Expense', y2023: '$98,500', y2022: '$95,000', y2021: '$92,500' },
+    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Total Cash Flow (Schedule E)', y2023: '$341,000', y2022: '$332,500', y2021: '$325,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Interest (paid to banks. etc.)', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Depreciation Expense', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Total Cash Flow (Schedule F)', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Itemized Deductions', y2023: '$45,000', y2022: '$42,500', y2021: '$40,000' },
+    { name: 'Income Tax Expense', y2023: '$105,000', y2022: '$97,500', y2021: '$90,000' },
+    { name: 'Total Deductions', y2023: '$150,000', y2022: '$140,000', y2021: '$130,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Living Expenses', y2023: '$110,000', y2022: '$105,000', y2021: '$100,000' },
+    { name: 'Total Adjustments to CF', y2023: '$110,000', y2022: '$105,000', y2021: '$100,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Personal Income', y2023: '$275,000', y2022: '$255,000', y2021: '$235,000' },
+    { name: 'Schedule C Income', y2023: '$95,000', y2022: '$87,500', y2021: '$82,500' },
+    { name: 'Schedule C Adjustments', y2023: '$54,000', y2022: '$53,000', y2021: '$52,000' },
+    { name: 'Schedule E Income', y2023: '$132,500', y2022: '$125,000', y2021: '$117,500' },
+    { name: 'Schedule F Income', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Schedule K-1 Income', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: '(Total Deductions)', y2023: '($150,000)', y2022: '($140,000)', y2021: '($130,000)' },
+    { name: '(Total Adjustments)', y2023: '($110,000)', y2022: '($105,000)', y2021: '($100,000)' },
+    { name: 'Gross Cash Flow (subT)', y2023: '$296,500', y2022: '$275,500', y2021: '$257,000' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Debt Service from Schedule', y2023: '$175,417', y2022: '$175,417', y2021: '$175,417' },
+    { name: 'Total Debt Service', y2023: '$175,417', y2022: '$175,417', y2021: '$175,417' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Total Net Cash Flow', y2023: '$121,083', y2022: '$100,083', y2021: '$81,583' },
+  ];
+
+  const scheduleEData = [
+    { name: 'Rents Received', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: 'Total Income', y2023: '$233,520', y2022: '$219,960', y2021: '$206,625' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Advertising', y2023: '$1,250', y2022: '$1,150', y2021: '$1,050' },
+    { name: 'Auto and Travel', y2023: '$2,500', y2022: '$2,350', y2021: '$2,200' },
+    { name: 'Cleaning and Maintenance', y2023: '$3,272', y2022: '$3,100', y2021: '$2,950' },
+    { name: 'Commissions', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Insurance', y2023: '$10,586', y2022: '$9,875', y2021: '$9,325' },
+    { name: 'Legal and Other Professional Fees', y2023: '$3,500', y2022: '$3,250', y2021: '$3,000' },
+    { name: 'Management Fees', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Mortgage Interest Paid to Banks, etc.', y2023: '$110,000', y2022: '$112,500', y2021: '$115,000' },
+    { name: 'Other Interest', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Repairs', y2023: '$8,500', y2022: '$7,950', y2021: '$7,500' },
+    { name: 'Supplies', y2023: '$1,850', y2022: '$1,725', y2021: '$1,625' },
+    { name: 'Taxes', y2023: '$17,166', y2022: '$16,500', y2021: '$15,950' },
+    { name: 'Utilities', y2023: '$5,386', y2022: '$5,200', y2021: '$4,950' },
+    { name: 'Depreciation Expense or Depletion', y2023: '$98,500', y2022: '$95,000', y2021: '$92,500' },
+    { name: 'Amortization', y2023: '$0', y2022: '$0', y2021: '$0' },
+    { name: 'Other Expenses', y2023: '$4,045', y2022: '$3,875', y2021: '$3,675' },
+    { name: 'Total Expenses', y2023: '$266,555', y2022: '$262,475', y2021: '$259,725' },
+    { name: '', y2023: '', y2022: '', y2021: '' },
+    { name: 'Net Income/(Loss)', y2023: '($33,035)', y2022: '($42,515)', y2021: '($53,100)' },
+    { name: 'Net Income/(Loss)', y2023: '($33,035)', y2022: '($42,515)', y2021: '($53,100)' },
+  ];
+
   const currentSourceDocument = sourceDocuments.find(doc => doc.id === selectedSourceDoc) || sourceDocuments[0];
 
   const handleStatementClick = (rowData: any) => {
@@ -217,6 +367,25 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
     const randomDocIndex = Math.floor(Math.random() * sourceDocuments.length);
     setSelectedSourceDoc(sourceDocuments[randomDocIndex].id);
   };
+
+  // Get the appropriate data based on statement type
+  const getStatementData = () => {
+    switch (statementType) {
+      case 'noistmt':
+        return noiStatementData;
+      case 'pfs':
+        return pfsData;
+      case 'tradcashflow':
+        return tradCashFlowData;
+      case 'schedulee':
+        return scheduleEData;
+      default:
+        return [];
+    }
+  };
+
+  // Function to render empty space for separator rows
+  const isEmptyRow = (item: any) => item.name === '' && item.y2023 === '' && item.y2022 === '' && item.y2021 === '';
 
   return (
     <div className="flex flex-col h-full">
@@ -348,172 +517,36 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-1/4">Item</TableHead>
-                      <TableHead className="text-right">2021 TY</TableHead>
-                      <TableHead className="text-right">$/SF</TableHead>
-                      <TableHead className="text-right">2022 TY</TableHead>
-                      <TableHead className="text-right">$/SF</TableHead>
-                      <TableHead className="text-right">2023 Q3</TableHead>
-                      <TableHead className="text-right">$/SF</TableHead>
+                      <TableHead className="w-2/5">Item</TableHead>
+                      <TableHead className="text-right">2023</TableHead>
+                      <TableHead className="text-right">2022</TableHead>
+                      <TableHead className="text-right">2021</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {statementType === 'operating' && (
-                      <>
-                        <TableRow>
-                          <TableCell colSpan={7} className="bg-gray-50 font-medium">Revenue:</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'revenue' })}>
-                          <TableCell>Rental Income</TableCell>
-                          <TableCell className="text-right text-blue-600">$712,834</TableCell>
-                          <TableCell className="text-right">$23.10</TableCell>
-                          <TableCell className="text-right text-blue-600">$727,583</TableCell>
-                          <TableCell className="text-right">$23.58</TableCell>
-                          <TableCell className="text-right text-blue-600">$802,124</TableCell>
-                          <TableCell className="text-right">$25.99</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
-                          <TableCell>CAM & Reimbursements</TableCell>
-                          <TableCell className="text-right text-blue-600">$120,450</TableCell>
-                          <TableCell className="text-right">$3.90</TableCell>
-                          <TableCell className="text-right text-blue-600">$124,063</TableCell>
-                          <TableCell className="text-right">$4.02</TableCell>
-                          <TableCell className="text-right text-blue-600">$128,965</TableCell>
-                          <TableCell className="text-right">$4.18</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
-                          <TableCell>Parking Income</TableCell>
-                          <TableCell className="text-right text-blue-600">$52,150</TableCell>
-                          <TableCell className="text-right">$1.69</TableCell>
-                          <TableCell className="text-right text-blue-600">$54,925</TableCell>
-                          <TableCell className="text-right">$1.78</TableCell>
-                          <TableCell className="text-right text-blue-600">$57,671</TableCell>
-                          <TableCell className="text-right">$1.87</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'other' })}>
-                          <TableCell>Other Income</TableCell>
-                          <TableCell className="text-right text-blue-600">$35,785</TableCell>
-                          <TableCell className="text-right">$1.16</TableCell>
-                          <TableCell className="text-right text-blue-600">$38,450</TableCell>
-                          <TableCell className="text-right">$1.25</TableCell>
-                          <TableCell className="text-right text-blue-600">$42,570</TableCell>
-                          <TableCell className="text-right">$1.38</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50 font-medium">
-                          <TableCell>Total Revenue</TableCell>
-                          <TableCell className="text-right text-blue-600">$921,219</TableCell>
-                          <TableCell className="text-right">$29.85</TableCell>
-                          <TableCell className="text-right text-blue-600">$945,021</TableCell>
-                          <TableCell className="text-right">$30.63</TableCell>
-                          <TableCell className="text-right text-blue-600">$1,031,330</TableCell>
-                          <TableCell className="text-right">$33.42</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={7} className="bg-gray-50 font-medium">Expenses:</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <TableCell>Property Taxes</TableCell>
-                          <TableCell className="text-right text-red-600">($98,750)</TableCell>
-                          <TableCell className="text-right">($3.20)</TableCell>
-                          <TableCell className="text-right text-red-600">($102,700)</TableCell>
-                          <TableCell className="text-right">($3.33)</TableCell>
-                          <TableCell className="text-right text-red-600">($107,808)</TableCell>
-                          <TableCell className="text-right">($3.49)</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <TableCell>Insurance</TableCell>
-                          <TableCell className="text-right text-red-600">($57,234)</TableCell>
-                          <TableCell className="text-right">($1.85)</TableCell>
-                          <TableCell className="text-right text-red-600">($62,384)</TableCell>
-                          <TableCell className="text-right">($2.02)</TableCell>
-                          <TableCell className="text-right text-red-600">($65,503)</TableCell>
-                          <TableCell className="text-right">($2.12)</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <TableCell>Utilities</TableCell>
-                          <TableCell className="text-right text-red-600">($112,585)</TableCell>
-                          <TableCell className="text-right">($3.65)</TableCell>
-                          <TableCell className="text-right text-red-600">($126,834)</TableCell>
-                          <TableCell className="text-right">($4.11)</TableCell>
-                          <TableCell className="text-right text-red-600">($93,946)</TableCell>
-                          <TableCell className="text-right">($3.04)</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <TableCell>Maintenance</TableCell>
-                          <TableCell className="text-right text-red-600">($95,000)</TableCell>
-                          <TableCell className="text-right">($3.08)</TableCell>
-                          <TableCell className="text-right text-red-600">($120,750)</TableCell>
-                          <TableCell className="text-right">($3.91)</TableCell>
-                          <TableCell className="text-right text-red-600">($80,500)</TableCell>
-                          <TableCell className="text-right">($2.61)</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <TableCell>Management</TableCell>
-                          <TableCell className="text-right text-red-600">($65,000)</TableCell>
-                          <TableCell className="text-right">($2.11)</TableCell>
-                          <TableCell className="text-right text-red-600">($67,600)</TableCell>
-                          <TableCell className="text-right">($2.19)</TableCell>
-                          <TableCell className="text-right text-red-600">($70,304)</TableCell>
-                          <TableCell className="text-right">($2.28)</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => handleStatementClick({ type: 'expenses' })}>
-                          <TableCell>Other Expenses</TableCell>
-                          <TableCell className="text-right text-red-600">($40,000)</TableCell>
-                          <TableCell className="text-right">($1.30)</TableCell>
-                          <TableCell className="text-right text-red-600">($99,450)</TableCell>
-                          <TableCell className="text-right">($3.22)</TableCell>
-                          <TableCell className="text-right text-red-600">($30,196)</TableCell>
-                          <TableCell className="text-right">($0.98)</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50 font-medium">
-                          <TableCell>Total Expenses</TableCell>
-                          <TableCell className="text-right text-red-600">($468,569)</TableCell>
-                          <TableCell className="text-right">($15.18)</TableCell>
-                          <TableCell className="text-right text-red-600">($579,718)</TableCell>
-                          <TableCell className="text-right">($18.79)</TableCell>
-                          <TableCell className="text-right text-red-600">($448,257)</TableCell>
-                          <TableCell className="text-right">($14.53)</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={7} className="bg-gray-50 font-medium">Net Operating Income (NOI):</TableCell>
-                        </TableRow>
-                        <TableRow className="cursor-pointer hover:bg-gray-50 font-medium">
-                          <TableCell>NOI</TableCell>
-                          <TableCell className="text-right font-medium">$452,650</TableCell>
-                          <TableCell className="text-right font-medium">$14.67</TableCell>
-                          <TableCell className="text-right font-medium">$365,303</TableCell>
-                          <TableCell className="text-right font-medium">$11.84</TableCell>
-                          <TableCell className="text-right font-medium">$583,073</TableCell>
-                          <TableCell className="text-right font-medium">$18.90</TableCell>
-                        </TableRow>
-                      </>
-                    )}
-                    
-                    {statementType === 'balance' && (
-                      <>
-                        <TableRow>
-                          <TableCell colSpan={7} className="bg-gray-50 font-medium">Assets:</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Cash & Equivalents</TableCell>
-                          <TableCell className="text-right text-blue-600">$254,321</TableCell>
-                          <TableCell className="text-right">$8.24</TableCell>
-                          <TableCell className="text-right text-blue-600">$312,456</TableCell>
-                          <TableCell className="text-right">$10.12</TableCell>
-                          <TableCell className="text-right text-blue-600">$345,789</TableCell>
-                          <TableCell className="text-right">$11.20</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Accounts Receivable</TableCell>
-                          <TableCell className="text-right text-blue-600">$78,542</TableCell>
-                          <TableCell className="text-right">$2.54</TableCell>
-                          <TableCell className="text-right text-blue-600">$65,321</TableCell>
-                          <TableCell className="text-right">$2.12</TableCell>
-                          <TableCell className="text-right text-blue-600">$54,897</TableCell>
-                          <TableCell className="text-right">$1.78</TableCell>
-                        </TableRow>
-                      </>
-                    )}
+                    {getStatementData().map((item, index) => (
+                      <TableRow 
+                        key={index} 
+                        className={cn(
+                          "hover:bg-gray-50 cursor-pointer",
+                          isEmptyRow(item) ? "h-6 bg-gray-50" : ""
+                        )}
+                        onClick={() => handleStatementClick(item)}
+                      >
+                        {isEmptyRow(item) ? (
+                          <TableCell colSpan={4} className="h-6 bg-gray-50"></TableCell>
+                        ) : (
+                          <>
+                            <TableCell className={cn("font-medium", item.name.includes('Total') || item.name.includes('subT') ? "font-bold" : "")}>
+                              {item.name}
+                            </TableCell>
+                            <TableCell className="text-right text-blue-600 font-medium">{item.y2023}</TableCell>
+                            <TableCell className="text-right text-blue-600 font-medium">{item.y2022}</TableCell>
+                            <TableCell className="text-right text-blue-600 font-medium">{item.y2021}</TableCell>
+                          </>
+                        )}
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </div>
