@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FileText, Table as TableIcon, BarChart3, CreditCard, DollarSign, Building, LineChart, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -510,4 +511,18 @@ const SpreadView: React.FC<SpreadViewProps> = ({ spreads }) => {
                           <TableCell className="text-right">$2.12</TableCell>
                           <TableCell className="text-right text-blue-600">$54,897</TableCell>
                           <TableCell className="text-right">$1.78</TableCell>
-                        </TableRow
+                        </TableRow>
+                      </>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SpreadView;
